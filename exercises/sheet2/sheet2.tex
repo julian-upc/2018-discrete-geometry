@@ -1,0 +1,83 @@
+\documentclass[11pt]{amsart}
+
+\usepackage{a4wide}
+\usepackage{paralist}
+\usepackage{url}
+\usepackage{bbm}
+\usepackage{nopageno}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cS}{\mathcal{S}}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\New}{New}
+\DeclareMathOperator{\area}{area}
+\newcommand{\RR}{\mathbbm{R}}
+\newcommand{\CC}{\mathbbm{C}}
+
+\begin{document}
+\begin{center}
+\textbf{\sffamily
+   Discrete and Algorithmic Geometry }
+
+\medskip
+   Julian Pfeifle,
+   UPC, 2018
+\end{center}
+
+\bigskip
+
+\begin{center}
+  \textbf{\sffamily Sheet 2}
+
+\bigskip
+ due on Monday, November 19, 2018
+
+\end{center}
+
+\bigskip
+\bigskip
+\bigskip
+
+\section*{Writing (due November 19)}
+\begin{enumerate}
+\item
+  \begin{enumerate}[(a)]
+  \item Using Gale's Evenness Criterion, explicitly write down all
+    subsets of vertices that make up a facet of the $4$-dimensional
+    cyclic polytope $C_4(8)$.
+  \item Draw the dual graph of $C_4(8)$, i.e.\ the graph that has the facets of $C_4(8)$ as nodes and an edge between two nodes if the corresponding facets share a ridge.
+    Try to make your drawing as legible as possible. \emph{Hint:} Labeling the nodes with the corresponding vertex sets will help you to get organized.
+\end{enumerate}
+  \bigskip\bigskip
+\item Let $P$ be the \emph{24-cell}, $P = \conv\{\pm e_i\pm e_j : 1\le i\ne j\le 4\}$, where $(e_1,\dots,e_4)$ is the standard basis of~$\RR^4$.
+ Also, consider the \emph{simple roots of type $F_4$}, namely the rows $r_1,\dots,r_4$ of the matrix
+    \[
+      \begin{bmatrix}
+        1 & -1 & 0 & 0 \\
+        0 & 1 & -1 & 0 \\
+        0 & 0 & 1 & 0 \\
+        -\frac12 & -\frac12 & -\frac12 & -\frac12
+      \end{bmatrix},
+    \]
+    and the linear hyperplanes $H_1,\dots,H_4$ orthogonal to them.
+    \begin{enumerate}
+      \item Count the vertices of $P$.
+      \item The \emph{root system of type $F_4$} arises from the four
+        simple roots by reflecting them in the $H_i$, adding all
+        new vectors (and the linear hyperplanes orthogonal to them)
+        obtained in this way to the set of reflecting hyperplanes, and
+        repeating the process until no new normal vectors/hyperplanes
+        are found. Count the number of resulting
+        hyperplanes. \emph{Answer: $48$}
+      \item Show that reflecting the vertices of $P$ in the $H_i$ leaves $P$ invariant.
+      \item Find all vertices of $P$ inside the \emph{fundamental cone of~$F_4$},
+        \[
+          C
+          \ = \
+          \{x\in\RR^4:\langle r_i,x\rangle\ge0\text{ for }i=1,\dots,4\}.
+          \]
+      \item Use this to efficiently describe and count the number of facets of~$P$.
+      \end{enumerate}
+\end{enumerate}
+\end{document}
+ 
