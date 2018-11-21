@@ -16,16 +16,10 @@ signed.sheet1.arnau.planas.pdf
 sheet1_quentin_pergeline.pdf2
 
 # sheet 2
-CdeCock_HW2.pdf
-code.zip
-Sheet2_problems_EBurjons.pdf
-Sheet2_problems_EBurjons.pdf.gpg
-Pilar_Cano.zip
-SHEET2_IreneParada.pdf
-Readme.txt
-TestChi.sage
-sheet2_claramateo.pdf
-JanFiserSheet2.pdf
+exercises/sheet2/solutions/Ander_Filip_Alberto/*.pdf
+exercises/sheet2/solutions/Ander_Filip_Alberto/*.zip
+exercises/sheet2/solutions/Ander_Filip_Alberto/*.m
+
 
 # code
 Makefile
