@@ -4,10 +4,13 @@ Aulas.pdf
 2013/additional_material/lecture4/example_*
 
 # sheet 2
-exercises/sheet2/solutions/*pdf
-xercises/sheet2/solutions/*/*pdf
-exercises/sheet2/solutions/*zip
-exercises/sheet2/solutions/*m
+exercises/sheet2/solutions/Ander_Filip_Alberto/*.pdf
+exercises/sheet2/solutions/Ander_Filip_Alberto/*.zip
+exercises/sheet2/solutions/Ander_Filip_Alberto/*.m
+exercises/sheet2/solutions/Victor_Ruiz/*pdf
+exercises/sheet2/solutions/Diego_Acedo_and_Xavier_Gombau/*pdf
+exercises/sheet2/solutions/marta*/*pdf
+exercises/sheet2/solutions/marta*/*py
 
 # code
 Makefile
