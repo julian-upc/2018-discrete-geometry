@@ -1,0 +1,200 @@
+% polymake for julian
+% Thu Jul  5 12:06:49 2018
+% q
+
+\begin{tikzpicture}[x  = {(0.9cm,-0.076cm)},
+                    y  = {(-0.06cm,0.95cm)},
+                    z  = {(-0.44cm,-0.29cm)},
+                    scale = .4,
+                    color = {lightgray}]
+
+
+  % DEF POINTS
+  \coordinate (v0_q) at (3, 1, 0);
+  \coordinate (v1_q) at (1, 3, 0);
+  \coordinate (v2_q) at (3, 0, 1);
+  \coordinate (v3_q) at (3, 0, -1);
+  \coordinate (v4_q) at (1, 0, 3);
+  \coordinate (v5_q) at (1, 0, -3);
+  \coordinate (v6_q) at (0, 3, 1);
+  \coordinate (v7_q) at (3, -1, 0);
+  \coordinate (v8_q) at (0, 3, -1);
+  \coordinate (v9_q) at (0, 1, 3);
+  \coordinate (v10_q) at (1, -3, 0);
+  \coordinate (v11_q) at (0, 1, -3);
+  \coordinate (v12_q) at (0, -1, -3);
+  \coordinate (v13_q) at (-1, 3, 0);
+  \coordinate (v14_q) at (0, -1, 3);
+  \coordinate (v15_q) at (0, -3, -1);
+  \coordinate (v16_q) at (-3, 1, 0);
+  \coordinate (v17_q) at (0, -3, 1);
+  \coordinate (v18_q) at (-1, 0, -3);
+  \coordinate (v19_q) at (-1, 0, 3);
+  \coordinate (v20_q) at (-3, 0, -1);
+  \coordinate (v21_q) at (-3, 0, 1);
+  \coordinate (v22_q) at (-1, -3, 0);
+  \coordinate (v23_q) at (-3, -1, 0);
+
+
+  % EDGES STYLE
+  \definecolor{edgecolor_q}{rgb}{ 0,0,0 }
+  \tikzstyle{facestyle_q} = [fill=none, fill opacity=0.85, preaction={draw=white, line cap=round, line width=1.5 pt}, draw=edgecolor_q, line width=1 pt, line cap=round, line join=round]
+
+
+  % FACES and EDGES and POINTS in the right order
+  \draw[facestyle_q] (v0_q) -- (v3_q) -- (v5_q) -- (v11_q) -- (v8_q) -- (v1_q) -- (v0_q) -- cycle;
+  \draw[facestyle_q] (v10_q) -- (v17_q) -- (v22_q) -- (v15_q) -- (v10_q) -- cycle;
+  \draw[facestyle_q] (v16_q) -- (v20_q) -- (v23_q) -- (v21_q) -- (v16_q) -- cycle;
+  \draw[facestyle_q] (v5_q) -- (v3_q) -- (v7_q) -- (v10_q) -- (v15_q) -- (v12_q) -- (v5_q) -- cycle;
+  \draw[facestyle_q] (v11_q) -- (v5_q) -- (v12_q) -- (v18_q) -- (v11_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v8_q) -- (v11_q) -- (v18_q) -- (v20_q) -- (v16_q) -- (v13_q) -- (v8_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v12_q) -- (v15_q) -- (v22_q) -- (v23_q) -- (v20_q) -- (v18_q) -- (v12_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v17_q) -- (v14_q) -- (v19_q) -- (v21_q) -- (v23_q) -- (v22_q) -- (v17_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v1_q) -- (v8_q) -- (v13_q) -- (v6_q) -- (v1_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v7_q) -- (v3_q) -- (v0_q) -- (v2_q) -- (v7_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v9_q) -- (v6_q) -- (v13_q) -- (v16_q) -- (v21_q) -- (v19_q) -- (v9_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v4_q) -- (v9_q) -- (v19_q) -- (v14_q) -- (v4_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v7_q) -- (v2_q) -- (v4_q) -- (v14_q) -- (v17_q) -- (v10_q) -- (v7_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_q] (v2_q) -- (v0_q) -- (v1_q) -- (v6_q) -- (v9_q) -- (v4_q) -- (v2_q) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+
+  % DEF POINTS
+  \coordinate (v0_unnamed__1) at (3, 1, 0);
+  \coordinate (v1_unnamed__1) at (1, 3, 0);
+  \coordinate (v2_unnamed__1) at (3, 0, 1);
+  \coordinate (v3_unnamed__1) at (3, 0, -1);
+  \coordinate (v4_unnamed__1) at (1, 0, 3);
+  \coordinate (v5_unnamed__1) at (1, 0, -3);
+  \coordinate (v6_unnamed__1) at (3, -1, 0);
+  \coordinate (v7_unnamed__1) at (0, 3, -1);
+  \coordinate (v8_unnamed__1) at (0, 1, -3);
+  \coordinate (v9_unnamed__1) at (0, -1, -3);
+  \coordinate (v10_unnamed__1) at (0, -1, 3);
+  \coordinate (v11_unnamed__1) at (-1, 0, -3);
+  \coordinate (v12_unnamed__1) at (-3, 0, -1);
+  \coordinate (v13_unnamed__1) at (-3, -1, 0);
+
+
+  % EDGES STYLE
+  \definecolor{edgecolor_unnamed__1}{rgb}{ 0,0,0 }
+
+  % FACES STYLE
+  \definecolor{facetcolor_unnamed__1}{rgb}{ 0.4667,0.9255,0.6196 }
+
+  \tikzstyle{facestyle_unnamed__1} = [fill=facetcolor_unnamed__1, fill opacity=0.85, draw=edgecolor_unnamed__1, line width=1 pt, line cap=round, line join=round]
+
+
+  % FACES and EDGES and POINTS in the right order
+  \draw[facestyle_unnamed__1] (v1_unnamed__1) -- (v0_unnamed__1) -- (v3_unnamed__1) -- (v5_unnamed__1) -- (v8_unnamed__1) -- (v7_unnamed__1) -- (v1_unnamed__1) -- cycle;
+  \draw[facestyle_unnamed__1] (v6_unnamed__1) -- (v10_unnamed__1) -- (v13_unnamed__1) -- (v9_unnamed__1) -- (v6_unnamed__1) -- cycle;
+  \draw[facestyle_unnamed__1] (v3_unnamed__1) -- (v6_unnamed__1) -- (v9_unnamed__1) -- (v5_unnamed__1) -- (v3_unnamed__1) -- cycle;
+  \draw[facestyle_unnamed__1] (v5_unnamed__1) -- (v9_unnamed__1) -- (v11_unnamed__1) -- (v8_unnamed__1) -- (v5_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_unnamed__1] (v7_unnamed__1) -- (v8_unnamed__1) -- (v11_unnamed__1) -- (v12_unnamed__1) -- (v7_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_unnamed__1] (v13_unnamed__1) -- (v12_unnamed__1) -- (v11_unnamed__1) -- (v9_unnamed__1) -- (v13_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_unnamed__1] (v3_unnamed__1) -- (v0_unnamed__1) -- (v2_unnamed__1) -- (v6_unnamed__1) -- (v3_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_unnamed__1] (v4_unnamed__1) -- (v1_unnamed__1) -- (v7_unnamed__1) -- (v12_unnamed__1) -- (v13_unnamed__1) -- (v10_unnamed__1) -- (v4_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_unnamed__1] (v6_unnamed__1) -- (v2_unnamed__1) -- (v4_unnamed__1) -- (v10_unnamed__1) -- (v6_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+  \draw[facestyle_unnamed__1] (v2_unnamed__1) -- (v0_unnamed__1) -- (v1_unnamed__1) -- (v4_unnamed__1) -- (v2_unnamed__1) -- cycle;
+
+
+  %POINTS
+
+
+  %FACETS
+
+\end{tikzpicture}
