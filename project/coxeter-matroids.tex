@@ -435,19 +435,28 @@ Tables~\ref{tab:cm3} and~\ref{tab:cm4} summarize the results of our enumeration 
 
 \begin{definition}
   A Coxeter matroid $Q\subseteq M_{\tau,R}$ is \emph{concordant} if each facet of~$Q$ is parallel to a facet of~$M_{\tau,R}$ (and not just of~$M_{\tau,[d]}$).
+  A concordant Coxeter matroid is \emph{picky} if all facet normals belong to the same orbit.
+  Compare the file \texttt{concordant-examples.pdf} and Figure~\ref{fig:concordant}.
 \end{definition}
 
-\begin{example}
-  Our partial enumeration yields the results depicted in \texttt{concordant-examples.pdf}.
-\end{example}
+\begin{figure}[htbp]
+  \centering
+  \begin{tabular}[c]{cccc}
+    \mbox{\input{img/b3/b3.0_1.3.tikz}}
+    &
+      \mbox{\input{img/b3/b3.0_1.22.tikz}}
+    &
+      \mbox{\input{img/b3/b3.0_1.25.tikz}}
+    &
+      \mbox{\input{img/b3/b3.0_1.56.tikz}}
+  \end{tabular}
+  \caption{From left to right, examples of Coxeter matroids belonging to $M_{\BB_3,\{0,1\}}$ that are: not concordant; concordant; concordant; and picky}
+  \label{fig:concordant}
+\end{figure}
 
 \begin{observation}
   By Challenge~\ref{prob:same-hyperplanes}, all Coxeter matroids belonging to $M_{\BB_3,02}$ or $M_{\DD_3,12}$ are concordant. 
 \end{observation}
-
-\begin{definition}
-  A \emph{picky} concordant matroid is a concordant matroid all of whose facets belong to the same symmetry type.
-\end{definition}
 
 \begin{challenge}
   Which types have picky concordant matroids, and how many of them? This is what we know so far:
@@ -475,6 +484,11 @@ This means that the root vectors generate a lattice.
 
 \begin{challenge}
   If the answer to Challenge~\ref{chall:root-lattice} is positive, find out if there is any relation between the Ehrhart polynomials of the Coxeter matroid polytopes of a fixed uniform Coxeter matroid.
+\end{challenge}
+
+\begin{challenge}
+  Are the Ehrhart polynomials of Coxeter matroids unimodal, as they are conjectured~\cite{loera09} to be in the case~$A_{n-1}$? 
+  Are their coefficients nonnegative, as they are conjectured to be in the case~$A_{n-1}$? 
 \end{challenge}
 
 \subsection{Splits of Coxeter matroids}
