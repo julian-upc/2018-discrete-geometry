@@ -1,0 +1,70 @@
+\documentclass[11pt]{amsart}
+
+\usepackage{a4wide}
+\usepackage{paralist}
+\usepackage{url}
+\usepackage{bbm}
+\usepackage{nopageno}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cS}{\mathcal{S}}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\New}{New}
+\DeclareMathOperator{\area}{area}
+\DeclareMathOperator{\vol}{vol}
+\newcommand{\RR}{\mathbbm{R}}
+\newcommand{\CC}{\mathbbm{C}}
+
+\begin{document}
+\begin{center}
+\textbf{\sffamily
+   Discrete and Algorithmic Geometry }
+
+\medskip
+   Julian Pfeifle,
+   UPC, 2018
+\end{center}
+
+
+\begin{center}
+  \textbf{\sffamily Sheet 4}
+
+\bigskip
+ due on Monday, December 10, 2018
+
+\end{center}
+
+\bigskip
+\bigskip
+\bigskip
+
+\begin{enumerate}
+\item Definition 9.2 in Ziegler's \emph{Lectures on Polytopes} constructs the linear map
+  \[
+    P
+    \ \xrightarrow{\pi^c}\ 
+    Q^c :=
+    \Big\{ \binom{\pi(x)}{cx} : x\in P\Big\}
+    \ \subset \
+    \RR^{q+1}
+  \]
+  from a projection $\pi:P\subset\RR^p\to Q\subset\RR^q$ and a linear function $c\in(\RR^q)^\star$.
+  Is it possible to give an algorithm to determine the set of lower faces $\mathcal L^\downarrow(Q^c)$ of $Q^c$ from just the set of facet normals of~$Q$, the projection~$\pi$, and the linear function~$c$, without running a convex hull algorithm on $Q^c$?
+
+  \bigskip\bigskip
+\item Show that
+  \[
+    \int_P f(x)\,\text{d}x
+    \ = \
+    \vol(P) \cdot f(p_0)
+  \]
+  for any polytope $P$, where $p_0 = \frac{1}{\vol(P)}\int_P x\,\text{d}x$ denotes the barycenter of $P$.
+  \bigskip\bigskip
+\item Complete the proof of Theorem 9.6 in Ziegler's \emph{Lectures on Polytopes}, possibly referring to \cite{bs-1992}.
+  
+\end{enumerate}
+
+\bibliographystyle{plain}
+\bibliography{sheet4}
+\end{document}
+ 
