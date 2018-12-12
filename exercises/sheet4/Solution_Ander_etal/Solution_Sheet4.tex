@@ -1,0 +1,139 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{dsfont}
+\usepackage{amsthm}  %Esto sirve para utilizar simbolos
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{color}
+%\usepackage{subfigure}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+%\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{todonotes}
+%\usepackage{cancel}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{mathtools}
+%\usepackage{subfigure} 
+\usepackage{subcaption}
+\usepackage{textcomp}
+\usepackage{bm}
+\usepackage[nobreak=true]{mdframed}	
+%\usepackage{minted}
+%\usemintedstyle{mathematica}
+
+\usepackage{fancyhdr}
+	\pagestyle{fancy}
+
+\hypersetup{
+	colorlinks=false,
+	pdfborder={1 1 0.005},
+}
+	
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cS}{\mathcal{S}}
+\DeclareMathOperator{\New}{New}
+\DeclareMathOperator{\area}{area}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\def\defs{\stackrel{\tiny{\mbox{def}}}{=}}		% For definitions
+	
+\DeclareMathOperator{\conv}{conv}
+%\renewcommand{\theenumi}{(\alph{enumi})}
+\newcommand{\RR}{\mathbb{R}}
+\theoremstyle{plain}
+\newmdtheoremenv[linewidth = 1pt]{result}{Result}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{prop}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{fact}{Fact}
+\newtheorem{claim}{Claim}
+\newtheorem{remark}{Remark}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+\rule{\linewidth}{0.05mm}\
+{\Large \textbf{Discrete and Algorithmic Geometry: Sheet 4\\}}
+{\large Ander Elkoroaristizabal Peleteiro \& Filip Cano Córdoba \& Alberto Larrauri Borroto\\}
+\rule{\linewidth}{0.05mm}\
+\end{center}
+
+\begin{enumerate}
+	\item Definition 9.2 in Ziegler's \emph{Lectures on Polytopes} constructs the linear map
+	\[
+	P
+	\ \xrightarrow{\pi^c}\ 
+	Q^c :=
+	\Big\{ \binom{\pi(x)}{cx} : x\in P\Big\}
+	\ \subset \
+	\RR^{q+1}
+	\]
+	from a projection $\pi:P\subset\RR^p\to Q\subset\RR^q$ and a linear function $c\in(\RR^p)^\star$.
+	Is it possible to give an algorithm to determine the set of lower faces 
+	$\mathcal L^\downarrow(Q^c)$ of $Q^c$ 
+	from just the set of facet normals of~$Q$, 
+	the projection~$\pi$, and the linear function~$c$, without running a convex hull algorithm on $Q^c$?
+	
+	\bigskip\bigskip
+	\item Show that
+	\[
+	\int_P f(x)\,\text{d}x
+	\ = \
+	\vol(P) \cdot f(p_0)
+	\]
+	for any polytope $P$ and linear function $f$, 
+	where $p_0 = \frac{1}{\vol(P)}\int_P x\,\text{d}x$ denotes the barycenter of $P$.
+	\bigskip\bigskip
+	\item Complete the proof of Theorem 9.6 in Ziegler's \emph{Lectures on Polytopes}, 
+	possibly referring to \cite{bs-1992}.
+	
+\end{enumerate}
+
+
+\textbf{1.}
+
+It is not possible to give such an algorithm.
+
+This is because $\pi,c$ and the set of facets of $Q$ do not determine the lower faces of $Q^c$.
+Consider $\pi:\RR^2\to \RR$ that deletes the last coordinate. 
+Consdier then $c=(0,1)$. 
+In this case, $\pi^c$ is the identity in $\RR^2$.
+Since in this case $q=1$, the interval is the only polytope the set of facet normals of $q$ is always the same,
+so $q=1$, the only relevant information is $\pi$ and $c$, but in this case, $\pi^c$ is the identity.
+Therefore, it such algorithm existed, the set of lower faces would be the same for all polygons,
+which is not true.
+
+\textbf{2.}
+
+Using the fact that $f$ is linear and linearity of the integral:
+\begin{equation}
+	\vol(P) f(p_0)
+	= \vol(P) f\left( \frac1{\vol (P)}\int_P x\,\mathrm{d}x \right)
+	= f\left(\int_P x\,\mathrm{d}x \right) 
+	= \int_P f(x) \,\mathrm{d}x
+\end{equation}
+
+\textbf{3. }
+
+IN THE NEXT EPISODE.
+
+\bibliographystyle{amsplain}
+\bibliography{bib}
+
+\end{document}
+
+
+
