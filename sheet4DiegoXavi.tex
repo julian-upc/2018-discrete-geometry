@@ -1,0 +1,145 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[a4paper, margin=3.5cm]{geometry}
+\setlength{\parindent}{2em} 
+\setlength{\parskip}{1em} 
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbbm{C}}
+\newcommand{\vol}{\text{vol}}
+\newcommand{\id}{\text{id}}
+
+\begin{document}
+
+\noindent
+\textbf{UPC MAMME / Discrete Geometry 2018}
+
+\noindent
+\textbf{Sheet 4}
+
+\noindent
+\textbf{Diego Acedo and Xavier Gombau}
+
+
+\subsubsection*{Solution 1}
+
+There is one thing which we do not find entirely clear in this problem. 
+The question whether we are given $P$ or not.
+
+If $P$ is not given, we have discussed with other colleagues the problem, and we have come to the conclusion that the lower faces of $Q^c$ are not determined from only the linear map $\pi : \RR^p \longrightarrow \RR^{q+1} $, and so it is not possible to give an algorithm to find such faces. 
+
+% Posibilidad de explicarlo mejor
+
+Nevertheless, we think that since $\pi$ is defined on $P$, then $P$ is given along with $\pi$, and so the lower faces are determined. 
+We have found a (computationally bad) algorithm which determines the set of lower faces of $Q^c$, but, since we cannot distinguish the interior points of $Q^c$ from those in the boundary, we use at some point a convex hull algorithm to solve this. 
+We are working on a way to solve that problem or show that indeed you are forced to use such convex hull algorithm. 
+
+Recall that the lower faces of $Q^c$ are those whose valid inequality is given by a hyperplane $h$ with $h_{d+1} < 0$ and a vector $h_0$, with $x \cdot h \leq h_0$ for all $x \in Q^c$.
+
+We do the following: 
+
+\begin{enumerate}
+	\item For each vertex $x_i \in P$, compute $\pi^c(x_i)$, so then it is $Q^c = conv\{\pi^c(x_i)\}$.
+	
+	\item Use a convex hull algorithm to find the actual vertices of $Q^c$.
+	
+	\item For all subsets of $d+1$ vertices:
+	\begin{enumerate}
+		\item Check if they are in the same hyperplane.
+		if they are, compute the hyperplane $(h,h_0)$ with $h_{d+1} < 0$
+		
+		\item For all other points $v$, check if $v \cdot h \leq h_0$:
+		\begin{enumerate}
+			\item If not, then it cannot be a lower facet, so we stop.
+			\item If $v \cdot h = h_0$, then $v$ is in the hyperplane, so we add $v$ to the subset, and compute the convex hull of this new subset to find the real facet.
+		\end{enumerate}
+		If at the end, all $v$ verify $v \cdot h \leq h_0$, then we have a valid inequality, and thus a face, and this face will be a lower face by definition.
+				
+	\end{enumerate}
+		
+\end{enumerate}
+
+
+
+\subsubsection*{Solution 2}
+Since $f$ is linear, we can write $f(x)=Ax$ for some matrix $A$. Then,
+\[ f(x) = Ax = \left( \sum_{i=1}^{n} a_{1i}x_i, \dots, \sum_{i=1}^{n} a_{ni}x_i \right) = (f_1(x), \dots, f_n(x)). \]
+For each coordinate $j=1,\dots,n$, using the linearity of the integral, 
+\[ \int_{Q}^{} f_j(x) \ dx = \int_{Q} \sum_{i=1}^{n} a_{ji}x_i \ dx = \sum_{i=1}^{n} a_{ji} \int_{Q} x_i dx = \sum_{i=1}^{n} a_{ji} \cdot r_{0i} = \text{vol}(Q)  A_j \cdot r_0, \]
+where $A_j$  is the $j$th row of $A$. Then, 
+\[ \int_{Q}^{} f(x) \ dx = (A_1\cdot r_0 \text{vol}(Q), \dots, A_n\cdot r_0 \text{vol}(Q)) = A \cdot r_0 \cdot \text{vol}(Q) = f(r_0) \cdot \text{vol}(Q). \]
+\subsubsection*{Solution 3}
+
+We follow the proof formally proving Ziegler's claims. 
+
+First of all, any convex combination of two sections is a section again.
+If $\gamma_1, \gamma_2$ are both sections of $\pi$, then for any $t\in [0,1]$, since $\pi$ is linear,
+$$\pi \circ (t\gamma_1+(1-t)\gamma_2)= t(\pi\circ \gamma_1) + (1-t)(\pi \circ \gamma_2) = t\cdot \text{id}+(1-t)\cdot\text{id}=\text{id}.$$
+
+Now, by the linearity of the integral, $\Sigma(P,Q)$ is convex. 
+If $p,q\in \Sigma(P,Q)$, then we can write
+$$
+\begin{array}{cc}
+ p=\frac{1}{\text{vol}(Q)}\int_Q \gamma_p(x) dx, & q=\frac{1}{\text{vol}(Q)}\int_Q \gamma_q(x) dx
+\end{array}
+$$
+and for any $t\in[0,1]$, 
+$$tp+(1-t)q = \frac{1}{\text{vol}(Q)}\int_Q (t\gamma_p + (1-t)\gamma_q)(x) dx \in \Sigma(P,Q)$$
+Now, the dimension of $\Sigma(P,Q)$ cannot be larger than $\dim P - \dim Q$, since $\Sigma(P,Q)\subset \pi^{-1}(r_0)$, which has this dimension. Here there are two assertions not proven. 
+First of all, that $\Sigma(P,Q)\subset \pi^{-1}(r_0)$, and secondly that $\dim \pi^{-1}(r_0)=\dim P - \dim Q$. 
+The second assertion is obtained by noticing that, by the first isomorphism theorem, $\pi$ induces an isomorphism $\RR^p/\ker \pi \simeq \RR^q$, so assuming $P$ and $Q$ are full dimensional, it must be $\dim P - \dim Q = \dim \ker \pi = \dim \pi^{-1}(r_0)$. 
+For the first assertion, take $p\in \Sigma(P,Q)$, along with its associated section $\gamma$. 
+Then, 
+$$\pi(p)=\frac{1}{\vol Q} \int_Q (\pi \circ \gamma)(x) dx = \frac{1}{\vol Q} \int_Q x dx =r_0.$$
+
+At this point, Ziegler claims: "Every piecewise linear \textit{non tight} section can be changed locally in two opposite directions; thus it can be written as a convex combination of other two sections that have a different integral. Thus we get that the set $\Sigma(P, Q)$ is the convex hull of the integrals $\frac{1}{\vol Q}\int_Q \gamma(x)dx$ for which $\gamma$ is a tight (piecewise linear, continuous) section. From this we conclude that $\Sigma(P, Q)$ is a polytope."
+
+First thing to notice here is that Ziegler does not define what a tight section is. 
+We have searched for possible definitions and we have several candidates: a measure thoretic idea, and another two trying to use the definition of tight subdivision. 
+We will keep updating the document as we progress.
+
+\begin{comment}
+	Following the idea that a subdivision is tight if $\dim F = \dim \pi(F)$ for all $F \in \mathcal{F}(P)$, we define a linear section $\gamma$ to be tight if $\dim F = \dim \gamma(F)$ for all $F\in \mathcal{F}(Q)$, and so a piecewise linear section will be tight if it is in each piece. 
+	Another option, using the measure theoretic definition of tightness, would be to say that a section $\gamma$ is tight if for any $\epsilon >0$ there exists a compact subset $K_\epsilon\subset Q$ such that the Lebesgue measure $\mu(\gamma(Q\setminus K_\epsilon))<\epsilon$. In any case, we are still working on understanding what these definitions actually mean and how any of them would correspond to both of Ziegler's claims.
+\end{comment}
+
+Now, to find the vertices of $\Sigma(P,Q)$ we use the fact that they correspond to a valid inequality where equality is reached by a single point, and so they maximize a certain linear form $c\in (\RR^p)^*$ when restricted to $P$. 
+Then again, Ziegler uses the term \textit{generic} with a certain amount of flexibility. We think that in this case it is enough that the corresponding hyperplane associated to $c$ is not parallel to any of the faces in $P$ (i.e. it is in general position with respect all facet defining hyperplanes). 
+If this is the case, then any linear form cannot be maximized simultaneously in two or more points, and so it will only be maximize in some vertex. 
+Also, Ziegler claims that if $c$ is generic, then every fiber $\pi^{-1}(r)$ for $r \in Q$ has a unique maximal element with respect to $c$. 
+We are still trying to prove this, but maybe one needs to have more flexibility with the word \textit{generic} in order to prove this.
+If all of this is true, then one can define a section $\gamma^c(r)$ as the point maximizing $c$ in $\pi^{-1}(r)$ for each $r\in Q$. 
+Here Ziegler claims that this section is unique (clear, buy construction), coherent and tight. 
+Since again, we do not have a definition for coherent section, we are bound to believe that a section induces some subdivision, and we can say that a section is tight/coherent if the corresponding subdivision is. 
+This is just an idea, and we are still working on it.
+
+Finally, Ziegler claims that the point corresponding to this section in $\Sigma(P,Q)$ is a vertex because it maximizes $c$. To see this, notice that by construction, $c\cdot \gamma^c(x)\geq c \cdot \gamma(x)$ for any section $\gamma$. Then, 
+\begin{displaymath}
+\begin{split}
+c\cdot \left( \frac{1}{\vol Q} \int_Q \gamma^c(x)dx\right) & =  \frac{1}{\vol Q} \int_Q c\cdot \gamma^c(x)dx \geq \frac{1}{\vol Q} \int_Q c\cdot \gamma(x)dx \geq  \\
+& \geq c\cdot \left( \frac{1}{\vol Q} \int_Q \gamma(x)dx\right)
+\end{split}
+\end{displaymath}
+So the point corresponding to $\gamma^c$ is the only point reaching equality in a valid inequality, and thus it is a vertex.
+
+Now one need to see that from each vertex and its corresponding defining hyperplane, one can obtain a tight subdivision of $Q$. 
+We have not completed this yet, and we still need to complete the last part of the proof. 
+
+
+
+
+
+
+
+
+
+\end{document}
