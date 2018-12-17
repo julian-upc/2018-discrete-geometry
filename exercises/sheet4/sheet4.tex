@@ -16,10 +16,7 @@
 \usepackage{ dsfont }
 \usepackage{enumerate}
 \usepackage{booktabs}
-\newcommand\T{\textrm{T}}  % "true"
-\newcommand\F{\textrm{F}}  % "false"
 \usepackage{multirow}
-\usepackage{hyperref}
 \usepackage{tikz-cd}
 \usepackage{caption}
 \usepackage{titlesec}
@@ -27,16 +24,7 @@
 \usepackage{ upgreek }
 \usepackage{mathtools}
 \usepackage{amsmath}
-\usepackage[all]{xy}
-\usepackage{pst-node}
-\usepackage{tikz-cd} 
-\usepackage{stackrel}
-\usepackage[margin=1.0in]{geometry}
 \usepackage[english]{babel}
-\usepackage{amsthm}
-\usepackage{amsmath}
-\usepackage{eufrak}
-\usepackage{afterpage}
 \usepackage{a4wide}
 \usepackage{paralist}
 \usepackage{url}
@@ -64,13 +52,7 @@
 \DeclareMathOperator{\vol}{vol}
 \newcommand{\RR}{\mathbbm{R}}
 \newcommand{\CC}{\mathbbm{C}}
-\DeclareMathOperator{\ext}{ext}
-\DeclareMathOperator{\Ext}{Ext}
-\DeclareMathOperator{\Hom}{Hom}
-\DeclareMathOperator{\Aut}{Aut}
-\DeclareMathOperator{\pear}{Par}
-\DeclareMathOperator{\Pear}{par}
-\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\im}{Im}
 \DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\id}{id}
 
@@ -79,7 +61,7 @@
 
 \title{DAG \\Sheet 4}
 \author{Víctor Ruiz}
-\date{}
+\date{17 December 2018}
 
 \usepackage{natbib}
 \usepackage{graphicx}
@@ -130,6 +112,8 @@
 	= \int_P f(x) \,\mathrm{d}x
 \end{equation*}
 
+\newpage
+
 \item I will enumerate the parts of the sketch of Ziegler's proof which are not clear and I'll explain them:
 
 \begin{enumerate}[(i)]
@@ -137,13 +121,22 @@
 \item $\Sigma(P,Q)$ is convex.
 
 \begin{proof}
-Given two points $a,b \in \Sigma(P,Q)$ and their corresponding sections $\gamma_a, \gamma_b$. Then $(ta + (1-t)b) = \int t\gamma_a + (1-t)\gamma_b = \int \gamma dx$ since the convex combination of 2 sections is a section (by the linearity of the integral and $\pi$).
+Let $a,b \in \Sigma(P,Q)$ be two points and their corresponding sections $\gamma_a, \gamma_b$. Then $(ta + (1-t)b) = \int t\gamma_a + (1-t)\gamma_b = \int \gamma dx$ since the convex combination of two sections is a section (by the linearity of the integral and $\pi$).
 \end{proof}
+
+\item $\Sigma (P,Q) \subseteq \pi^{-1}(r_0)$
+
+\begin{proof}
+Take $a \in \Sigma(P,Q)$ and $\gamma_a$ its corresponding section, we have to prove that $\pi(a) = r_0$:
+\[\pi(a) = \pi( \frac{1}{\vol(Q)}\int \gamma_a dx) = \frac{1}{\vol(Q)}\int \pi(\gamma_a) dx = \frac{1}{\vol(Q)} \int x dx = r_0 \]
+\end{proof}
+
 
 \item $\dim(\Sigma(P,Q)) \leq p-q$ with $\dim(P) = p$, $\dim(Q) = q$.
 
 \begin{proof}
-We have to see that $\pi^{(-1)}(r_0)$ has dimension p-q. Observing that, since we have supposed that the dimensions of $P$ and $Q$ are maximal, $\ker(\pi) = p - q$ and so we get the result.
+We only have to see that $\pi^{-1}(r_0)$ has dimension $p-q$. \\ First, we have to suppose that $P$ and $Q$ have maximal dimension (if not, embbed them on its corresponding lower dimensional affine spaces). With this, using that we can use projective coordinates so $\pi$ can be seen as a linear function, 
+\[\dim(\pi^{-1}(r_0)) = \dim(\ker(\pi)) = \dim(\mathbb{R}^p) - \dim(\im(\pi)) = p-q\]
 \end{proof}
 
 
@@ -151,7 +144,12 @@ We have to see that $\pi^{(-1)}(r_0)$ has dimension p-q. Observing that, since w
 \item "Every piecewise linear section that is not tight can be changed locally in two directions; thus it can be written as a convex combination of two other sections".
 
 \begin{proof}
+We have to define what a tight section is first, and prove that it has de desired properties:
 
+\begin{definition}
+A section $\gamma$ is tight if $\im \gamma = \bigcup_{f \in F}f$ for some $F \subseteq L(P)$. 
+\end{definition}
+With this definition, the ideas of Ziegler's proof work except this one we have to prove; that it can be changed locally in two directions.
 \end{proof}
 
 
@@ -159,13 +157,26 @@ We have to see that $\pi^{(-1)}(r_0)$ has dimension p-q. Observing that, since w
 every fiber $\pi^{-1}(r)$ for $ r \in Q$ has a unique maximal element with respect to $c$".
 
 \begin{proof}
-The problem of this part is the definition of $generic$ linear functions. In this case there's only one possibility for the definition of generic:
+The problem of this part is the definition of $\emph{generic}$ linear functions. In this case there's only one possibility for the definition of generic:
 
-\begin{definition}
-A linear function $c$ will be generic with respect to $\Gamma(P,Q)$ if $c$ is generic with respect to $P$ and with respect to $\pi$, that is that $c$ is not parallel to $\pi^{(-1)}(r)$ for $r \in Q$.
+\begin{definition} [Ziegler's Definition 3.3]
+A linear function $c$ is generic with respect to a polytope $P$ if $cv_i \not= cv_j$ for every two distinct vertices $v_i, v_j$ of $P$.
 \end{definition}
 
-Now with this definition of generic, it is clear that every fiber $\pi^{-1}(r)$ has a unique maximal element with respect to $c$. It is "generic" since the set of forbidden $c$ has area 0.
+\begin{definition}
+A linear function $c$ will be generic with respect to a projection $\pi$ if $c$ is not parallel to $\pi^{-1}(r)$ for $r \in Q$.
+\end{definition}
+
+
+Now we use that $c$ is generic if it is generic with respect to $P$ and with respect to $\pi$ .With this definition of generic, it is clear that every fiber $\pi^{-1}(r)$ has a unique maximal element with respect to $c$.
+\newline 
+The last thing to see is that this definition of generic means that the $c$ which are not generic are irrelevant, which induces us the following definition:
+
+\begin{definition}
+A set $C \subseteq \mathbb{R}^p$ is in general position if $C^c$ has empty interior.
+\end{definition}
+
+(CLAIM: THE SET OF GENERIC c IS IN GENERAL POSITION)
 \end{proof}
 
 
@@ -185,4 +196,3 @@ Now with this definition of generic, it is clear that every fiber $\pi^{-1}(r)$ 
 
 
 \end{document}
-
