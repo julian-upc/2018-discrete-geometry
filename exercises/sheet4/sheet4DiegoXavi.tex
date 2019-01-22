@@ -1,0 +1,163 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[a4paper, margin=3.5cm]{geometry}
+\setlength{\parindent}{2em} 
+\setlength{\parskip}{1em} 
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{comment}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbbm{C}}
+\newcommand{\vol}{\text{vol}}
+\newcommand{\id}{\text{id}}
+
+\begin{document}
+%We merged the pull request by mistake, and the conversation with Julian was deleted.
+
+\title{Sheet 4}
+
+\author{Diego Acedo and Xavier Gombau}
+
+\maketitle
+\subsubsection*{Solution 1}
+There is one thing which we do not find entirely clear in this problem:
+the question whether we are given $P$ or not.
+
+If $P$ is not given, we have discussed with other colleagues the problem, and we have come to the conclusion that the lower faces of $Q^c$ are not determined from only the linear map $\pi : \RR^p \longrightarrow \RR^{q+1} $, and so it is not possible to give an algorithm to find such faces. 
+As an example, we could consider the projection to the first coordinate, $\pi\colon \RR^2\to Q\subset \RR$, and the vector $c=(0,1)$. Then, for $x=(x_1,x_2)\in \RR^2$, it is $c\cdot x=x_2$, and so $\pi^c=\text{id}$. 
+Hence, for any polytope $P\subset \RR^2$, we have that $Q^c=\text{id}(P)=P$, and so for different choices of $P$ we get different sets of lower faces.
+
+Nevertheless, we think that since $\pi$ is defined on $P$, then $P$ is given along with $\pi$, and so the lower faces are determined. 
+We have found an algorithm which determines the set of lower faces of $Q^c$ but, since we cannot distinguish the interior points of $Q^c$ from those in the boundary, we use at some point a convex hull algorithm to solve this. 
+
+Recall that the lower faces of $Q^c$ are those whose valid inequality is given by a hyperplane $h$ with $h_{d+1} < 0$ and a vector $h_0$, with $x \cdot h \leq h_0$ for all $x \in Q^c$.
+
+With ``convex hull algorithm'' we refer to any algorithm that can distinguish points in the boundary from points in the interior of a given polytope.
+
+Our algorithmn does the following:
+\begin{enumerate}
+	\item For each vertex $x_i \in P$, compute $\pi^c(x_i)$, so that it is $Q^c = \text{conv}\{\pi^c(x_i)\}$.
+	
+	\item Use a convex hull algorithm to find the incidence graph of $Q^c$. 
+	
+	\item For all subsets of $d+1$ vertices:
+	
+	\begin{enumerate}
+		\item Check if they are in the same hyperplane.
+		
+		If they are, compute the hyperplane $(h,h_0)$ with $h_{d+1} < 0.$
+		
+		\item For all other points $v$, check if $v \cdot h \leq h_0$:
+		
+		\begin{enumerate}
+			
+			\item If not, then it cannot be a lower facet, so we stop.
+			
+			\item If $v \cdot h = h_0$, then $v$ is in the hyperplane, so we add $v$ to the subset, and compute the convex hull of this new subset to find the real facet.
+			
+		\end{enumerate}
+	
+		If at the end, all vertices $v$ verify $v \cdot h \leq h_0$, then we have a valid inequality, and thus a facet, and this facet will be a lower facet by definition. We can find lower dimensional faces by intersecting lower facets.
+				
+	\end{enumerate}
+		
+\end{enumerate}
+
+We have been searching for ways to avoid this convex hull (or any equivalent idea) from the algorithm, but we cannot find a way to do this with the information that we have. We have noticed that by having the set of facet normals of $Q$, we have the first $q$ coordinates of the normal vectors of all facets in $Q^c$, so we only need to determine this last coordinate, which will depend on $c$ and $P$. Sadly we did not find a way to fulfill this purpose, and neither a way to prove that such algorithm does not exist. 
+
+\subsubsection*{Solution 2}
+Since $f$ is linear, we can write $f(x)=Ax$ for some matrix $A$. Then,
+\[ f(x) = Ax = \left( \sum_{i=1}^{n} a_{1i}x_i, \dots, \sum_{i=1}^{n} a_{ni}x_i \right) = (f_1(x), \dots, f_n(x)). \]
+For each coordinate $j=1,\dots,n$, using the linearity of the integral, 
+\[ \int_{Q}^{} f_j(x) \ dx = \int_{Q} \sum_{i=1}^{n} a_{ji}x_i \ dx = \sum_{i=1}^{n} a_{ji} \int_{Q} x_i dx = \sum_{i=1}^{n} a_{ji} \cdot r_{0i} = \text{vol}(Q)  A_j \cdot r_0, \]
+where $A_j$  is the $j$th row of $A$. Then, 
+\[ \int_{Q}^{} f(x) \ dx = (A_1\cdot r_0 \text{vol}(Q), \dots, A_n\cdot r_0 \text{vol}(Q)) = A \cdot r_0 \cdot \text{vol}(Q) = f(r_0) \cdot \text{vol}(Q). \]
+\subsubsection*{Solution 3}
+
+We follow the proof formally proving Ziegler's claims. 
+
+First of all, any convex combination of two sections is a section again.
+If $\gamma_1, \gamma_2$ are both sections of $\pi$, then for any $t\in [0,1]$, since $\pi$ is linear,
+$$\pi \circ (t\gamma_1+(1-t)\gamma_2)= t(\pi\circ \gamma_1) + (1-t)(\pi \circ \gamma_2) = t\cdot \text{id}+(1-t)\cdot\text{id}=\text{id}.$$
+
+Now, by the linearity of the integral, $\Sigma(P,Q)$ is convex. 
+If $p,q\in \Sigma(P,Q)$, then we can write
+$$
+\begin{array}{cc}
+ p=\frac{1}{\text{vol}(Q)}\int_Q \gamma_p(x) dx, & q=\frac{1}{\text{vol}(Q)}\int_Q \gamma_q(x) dx
+\end{array}
+$$
+and for any $t\in[0,1]$, 
+$$tp+(1-t)q = \frac{1}{\text{vol}(Q)}\int_Q (t\gamma_p + (1-t)\gamma_q)(x) dx \in \Sigma(P,Q)$$
+Now, the dimension of $\Sigma(P,Q)$ cannot be larger than $\dim P - \dim Q$, since $\Sigma(P,Q)\subset \pi^{-1}(r_0)$, which has this dimension. Here there are two unproven assertions.
+First of all, that $\Sigma(P,Q)\subset \pi^{-1}(r_0)$, and secondly that $\dim \pi^{-1}(r_0)=\dim P - \dim Q$. 
+The second assertion is obtained by noticing that, by the first isomorphism theorem, $\pi$ induces an isomorphism $\RR^p/\ker \pi \simeq \RR^q$, so assuming $P$ and $Q$ are full dimensional, it must be $\dim P - \dim Q = \dim \ker \pi = \dim \pi^{-1}(r_0)$. 
+For the first assertion, take $p\in \Sigma(P,Q)$, along with its associated section $\gamma$. 
+Then, 
+$$\pi(p)=\frac{1}{\vol Q} \int_Q (\pi \circ \gamma)(x) dx = \frac{1}{\vol Q} \int_Q x dx =r_0.$$
+We must also check that $p\in P$. If $\gamma$ is piecewise linear, and $\{p_1,\dots,p_n\}$ are the vertices of $P$, we can express $\gamma(x)=\sum_{i=1}^n t_i(x)p_i$, where $\sum t_i(x)=1$ for all $x\in Q$. Then, 
+$$\frac{1}{\vol Q}\int_Q \gamma(x)dx=\frac{1}{\vol Q}\sum p_i\int_Q t_i(x)=\frac{1}{\vol Q}\sum p_i t_i(r_0)\vol Q = \sum p_i t_i(r_0),$$
+and since $\sum t_i(r_0)=1$, this belongs to $P$.
+
+At this point, Ziegler claims: ``Every piecewise linear \textit{non tight} section can be changed locally in two opposite directions; thus it can be written as a convex combination of other two sections that have a different integral. Thus we get that the set $\Sigma(P, Q)$ is the convex hull of the integrals $\frac{1}{\vol Q}\int_Q \gamma(x)dx$ for which $\gamma$ is a tight (piecewise linear, continuous) section. From this we conclude that $\Sigma(P, Q)$ is a polytope.''
+
+First thing to notice here is that Ziegler does not give a definition of tight section. 
+We have searched for possible definitions and, taking into account the statement of the theorem, we have come up with the following one: 
+
+We may assume all sections $\gamma$ are continuous and take values on the boundary of $P$. If not, we can express, for each $x\in Q$, $\gamma(x)$ as a convex combination of two continuous sections taking values in $\pi^{-1}(x) \cap \partial P$. 
+Now, for any continuous section $\gamma$ taking values on the boundary, we can find a hyperplane $c$ such that $\gamma(x)$ maximizes $c$ for each $x\in Q$. This $c$ determines a coherent subdivision of $Q$ by the map $\pi^c$. We will say that a section is tight if this induced subdivision is tight. 
+Conversely, for any tight subdivision defined by a generic $c\in (\RR^p)^*$, we can define a section $\gamma(x)$ as the point in $\pi^{-1}(x)$ maximizing $c$. This way we have a bijection between tight subdivisions and tight sections.
+We say that a linear form $c$ is \textit{generic} if the corresponding hyperplane associated to $c$ is not parallel to any of the facets in $P$ (i.e. $c$ is in general position with respect to all facet defining hyperplanes). 
+
+Now, since we only have finitely many tight subdivisions (since $P$ and $Q$ have a finite number of faces), we only have finitely many tight sections.
+If a section is not tight, there is a face $F$ in $P$, in the corresponding subdivision, such that $\dim \pi(F) < \dim F$. 
+% We are not formally sure about this approach, but we do not find any other way to make it. 
+For each $x$ such that $\gamma(x)\in F$, we can move inside $\pi^{-1}(x)$ in opposite directions towards the boundary of $F$, so that the corresponding subdivision uses faces of lower dimension, instead of $F$. We can keep doing this until reaching a section which is tight. 
+
+Now, to find the vertices of $\Sigma(P,Q)$ we use the fact that each of them corresponds to a valid inequality where equality is reached by a single point, and so they maximize a generic linear form $c\in (\RR^p)^*$ when restricted to $P$. 
+This is due to the fact that a generic linear form cannot be maximized simultaneously in two or more points, and so it will correspond to a vertex. 
+
+Ziegler also claims that if $c$ is generic, then every fiber $\pi^{-1}(r)$ for $r \in Q$ has a unique maximal element with respect to $c$, so we can then define the section $\gamma^c$ as before, being $\gamma^c(r)$ the point maximizing $c$ in $\pi^{-1}(r)$ for each $r\in Q$. 
+Here Ziegler claims that this section is unique (clear, by construction, and because the maximum is obtained in a unique point), coherent (because it induces a coherent subdivision) and tight. 
+
+This section is tight because, since $c$ is generic, on each face the maximum is obtained in the boundary of the face, so for each face $F$ of the subdivision in $Q$, $r\in F$, and $p\in \pi^{-1}(x)$ we always move (to maximize $c$) towards the boundary of each face of $P$ whose intersection with $\pi^{-1}(F)$ is non empty, and the final face defined by $\gamma(F)$ ends up having the same dimension as $F$, so the induced subdivision is tight and thus the section. 
+
+Finally, Ziegler claims that the point corresponding to this section in $\Sigma(P,Q)$ is a vertex because it maximizes $c$. To see this, notice that by construction, $c\cdot \gamma^c(x)\geq c \cdot \gamma(x)$ for any section $\gamma$. Then, 
+\begin{displaymath}
+\begin{split}
+c\cdot \left( \frac{1}{\vol Q} \int_Q \gamma^c(x)dx\right) & =  \frac{1}{\vol Q} \int_Q c\cdot \gamma^c(x)dx \geq \frac{1}{\vol Q} \int_Q c\cdot \gamma(x)dx \geq  \\
+& \geq c\cdot \left( \frac{1}{\vol Q} \int_Q \gamma(x)dx\right)
+\end{split}
+\end{displaymath}
+So the point corresponding to $\gamma^c$ is the only point reaching equality in a valid inequality, and thus it is a vertex.
+
+Hence if we join everything, we have that each tight section defines a generic hyperplane which defines a vertex in $\Sigma(P,Q)$.
+Conversely, any vertex in $\Sigma(P,Q)$ is of the form $\frac{1}{\vol Q} \int_Q \gamma^c(x)dx$, for some generic $c\in (\RR^p)^*$, and so $\gamma^c$ is a tight section and thus defines a tight subdivision. Thus, we get a bijection between the vertices of $\Sigma(P,Q)$ and the tight subdivisions of $\pi\colon P\to Q$.
+
+To finish the proof, we extend this correspondence between subdivisions and vertices to higher dimensional faces. 
+The idea is that, for a given face, now the defining hyperplane $c$ is not generic, and so more than one point could maximize $c$ in a given fiber. Nevertheless, these points will belong to the same face, so we can define the section by choosing one of them, and induce a subdivision by including the whole face. 
+Ziegler does this formally:
+
+Each face has a defining hyperplane $c$, and so $c$ defines a coherent subdivision of $Q$ by the mapping $\pi^c$. Ziegler claims then that a point $\frac{1}{\vol Q}\int_Q \gamma$ is in the face defined by $c$ if and only if $\gamma(Q)$ is contained in the collection of lower faces defining the subdivision.
+%ESCRIBIR MEJOR
+Notice that the point defined by $\gamma$ is in the face defined by $c$ iff it maximizes $c$, and $\gamma(Q)\subset \mathcal{F}^c$ iff $\gamma(x)$ maximizes $c$ in each $\pi^{-1}(x)$
+
+For the right implication, assume $\frac{1}{\vol Q}\int_Q\gamma$ maximizes $c$, and let $y=\gamma(x)$ for a given $x\in Q$. Then, $y$ maximizes $\gamma$ in $\pi^{-1}(x)$ (otherwise we could get a section $\gamma'$ such that $c\cdot \int_Q \gamma' \geq c \cdot \int_Q \gamma$). Then, $$\pi^c(y)=\left( \begin{array}{c}\pi(y)\\cy \end{array}\right)=\left( \begin{array}{c}x\\cy \end{array}\right),$$
+so since $y$ maximizes $c$, $\pi^c(y)$ is in a lower face. 
+
+For the left implication, assume $\gamma(x)$ in a lower face for each $x\in Q$. Then, $\gamma(x)$ maximizes $c$ in each $\pi^{-1}(x)$. Hence, $$c\cdot \frac{1}{\vol Q}\int_Q \gamma = \frac{1}{\vol Q}\int_Q c\cdot \gamma$$ is maximal, and so the point $\frac{1}{\vol Q}\int_Q \gamma$ is in the face defined by $c$.
+
+
+
+
+
+
+
+\end{document}
