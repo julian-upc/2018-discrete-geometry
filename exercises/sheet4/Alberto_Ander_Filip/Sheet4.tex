@@ -1,0 +1,944 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{dsfont}
+\usepackage{amsthm}  %Esto sirve para utilizar simbolos
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{color}
+%\usepackage{subfigure}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+%\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{todonotes}
+%\usepackage{cancel}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{mathtools}
+%\usepackage{subfigure} 
+\usepackage{subcaption}
+\usepackage{comment}
+\usepackage{textcomp}
+\usepackage{bm}
+\usepackage[nobreak=true]{mdframed}	
+%\usepackage{minted}
+%\usemintedstyle{mathematica}
+
+\usepackage{fancyhdr}
+	\pagestyle{fancy}
+
+\hypersetup{
+	colorlinks=false,
+	pdfborder={1 1 0.005},
+}
+
+\let\emph\relax % there's no \RedeclareTextFontCommand
+\DeclareTextFontCommand{\emph}{\bfseries\em}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cS}{\mathcal{S}}
+\DeclareMathOperator{\New}{New}
+\DeclareMathOperator{\area}{area}
+\DeclareMathOperator{\relint}{relint}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\Ev}{Ev}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\def\defs{\stackrel{\tiny{\mbox{def}}}{=}}		% For definitions
+	
+\DeclareMathOperator{\conv}{conv}
+%\renewcommand{\theenumi}{(\alph{enumi})}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\eps}{\varepsilon}
+\theoremstyle{plain}
+\newmdtheoremenv[linewidth = 1pt]{result}{Result}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{fact}{Fact}
+\newtheorem{claim}{Claim}
+\newtheorem{remark}{Remark}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+\rule{\linewidth}{0.05mm}\
+{\Large \textbf{Discrete and Algorithmic Geometry: Sheet 4\\}}
+{\large Ander Elkoroaristizabal Peleteiro \& Filip Cano Córdoba \& Alberto Larrauri Borroto\\}
+\rule{\linewidth}{0.05mm}\
+\end{center}
+
+\begin{enumerate}
+	\item Definition 9.2 in Ziegler's \textit{Lectures on Polytopes} constructs the linear map
+	\[
+	P
+	\ \xrightarrow{\pi^c}\ 
+	Q^c :=
+	\Big\{ \binom{\pi(x)}{cx} : x\in P\Big\}
+	\ \subset \
+	\RR^{q+1}
+	\]
+	from a projection $\pi:P\subset\RR^p\to Q\subset\RR^q$ and a linear function $c\in(\RR^p)^\star$.
+	Is it possible to give an algorithm to determine the set of lower faces 
+	$\mathcal L^\downarrow(Q^c)$ of $Q^c$ 
+	from just the set of facet normals of~$Q$, 
+	the projection~$\pi$, and the linear function~$c$, without running a convex hull algorithm on $Q^c$?
+	
+	\bigskip\bigskip
+	\item Show that
+	\[
+	\int_P f(x)\,\text{d}x
+	\ = \
+	\vol(P) \cdot f(p_0)
+	\]
+	for any polytope $P$ and linear function $f$, 
+	where $p_0 = \frac{1}{\vol(P)}\int_P x\,\text{d}x$ denotes the barycenter of $P$.
+	\bigskip\bigskip
+	\item Complete the proof of Theorem 9.6 in Ziegler's 
+	\textit{Lectures on Polytopes}, 
+	possibly referring to \cite{bs-1992}.
+	
+\end{enumerate}
+
+
+\textbf{1.}
+
+It is not possible to give such an algorithm.
+
+This is because $\pi,c$ and the set of facets of $Q$ do not determine the lower faces of $Q^c$.
+Consider $\pi:\RR^2\to \RR$ that deletes the last coordinate. 
+Consdier then $c=(0,1)$. 
+In this case, $\pi^c$ is the identity in $\RR^2$.
+Since in this case $q=1$, the interval is the only polytope the set of facet normals of $q$ is always the same,
+so $q=1$, the only relevant information is $\pi$ and $c$, but in this case, $\pi^c$ is the identity.
+Therefore, it such algorithm existed, the set of lower faces would be the same for all polygons,
+which is not true.
+
+\textbf{2.}
+
+Using the fact that $f$ is linear and linearity of the integral:
+\begin{equation}
+	\vol(P) f(p_0)
+	= \vol(P) f\left( \frac1{\vol (P)}\int_P x\,\mathrm{d}x \right)
+	= f\left(\int_P x\,\mathrm{d}x \right) 
+	= \int_P f(x) \,\mathrm{d}x
+\end{equation}
+
+\textbf{3. }
+
+Unless stated otherwise, 
+when we consider sets of the form
+$\pi^{-1}(U)$, for some $U\subseteq Q$,
+they will be intersected with $P$.
+That is, we will be considering $\pi\colon P\to Q$, 
+and not its equivalent map $\pi\colon \RR^p\to\RR^q$.
+
+%\boxed{\textbf{$\bm{\Sigma(P,Q)}$ is a convex set}}
+\begin{lemma}
+	\label{clm:convex}
+	$\Sigma(P,Q)$ is a convex set.
+\end{lemma}
+\begin{proof}
+	Consider two points $y_1,y_2 \in \Sigma(P,Q)$,
+	and a convex combination of them $y= q_1y_1 + q_2y_2$. 
+	Then $y_1 = \int_Q \gamma_1$, $y_2 = \int_Q \gamma_2$ 
+	for some $\gamma_1,\gamma_2$ sections. 
+	
+	Then, by linearity of the integral:
+	$y = \int_Q q_1\gamma_1 +q_2\gamma_2$. 
+	So we have to see that the convex combination of sections is a section.
+	Let $\gamma \defs q_1\gamma_1 +q_2\gamma_2$. 
+	Indeed, since $\pi$ is affine and $q_1+q_2 = 1$:
+	\begin{equation}
+		\pi(\gamma(x)) = 
+		\pi(q_1\gamma_1(x) + q_2\gamma_2(x)) =
+		 q_1\pi(\gamma_1(x)) + q_2\pi(\gamma_2(x)) =
+ 		(q_1+q_2)x = x
+	\end{equation}
+\end{proof}
+% \boxed{\textbf{$\bm{\Sigma(P,Q) \subseteq \pi^{-1}(r_0)}$}}
+
+\begin{lemma}
+	$\dim(\Sigma(P,Q)) \leq p-q$.
+\end{lemma}
+\begin{proof}
+	First we will prove that 
+	$\Sigma(P,Q) \subseteq \pi^{-1}(r_0)$,
+	and then we will prove that the dimension of the 
+	fiber $\pi^{-1}(r_0)$ is $p-q$.\par	
+	We want to see that 
+	$y\in\Sigma(P,Q) \implies \pi(y) = \bm{r_0}$.
+	Consider $y\in \Sigma(P,Q)$. 
+	Then there exists $\gamma:Q\to P$ section,
+	such that 
+	$y =\frac1{\vol(Q)} \int_Q \gamma(x)dx$.
+	Then
+	\begin{equation}
+		\pi(y) = \pi\left(\frac{1}{\vol(Q)} \int_Q \gamma(x)dx\right)
+	\end{equation}
+	Using linearity of $\pi$ and of the integral, 
+	this is equal to
+	%\footnote{This step probably needs some more explanation. 
+	%Or maybe not. It's just putting coordinates.}
+	\begin{equation}
+	\frac{1}{\vol(Q)}\int_Q \pi(\gamma(x))dx 
+	= \frac{1}{\vol(Q)}\int_Q xdx 
+	= \bm{r_0}
+	\end{equation} 	
+	Hence $\Sigma(P,Q) \subseteq \pi^{-1}(r_0)$.
+		
+	Now we need to prove that 
+	$\dim \pi^{-1}(\bm{r_0}) = p-q$. 
+	For the sake of simplicity, 
+	we will consider now $\pi^{-1}(\bm{r_0})$ as an affine
+	space in $\RR^p$ (i.e., considering $\pi\colon\RR^p\to\RR^q$.)	
+	Indeed, since $\pi$ is an affine function, 
+	it has an associated linear function $\overline{\pi}$,
+	and
+	$\dim(\pi^{-1}(\bm{r_0})) = \dim \ker(\overline\pi) =
+	 p - \dim \mbox{Im} \overline\pi$.
+	Since we are assuming that $P$ and $Q$ have full dimension,
+	${\dim\mbox{Im}\overline\pi=q}$.
+\end{proof}
+
+\begin{lemma} \label{lem:lemazo}
+ Let $v\in \RR^p$. Then the function $f_v: P\rightarrow \RR$ defined by $s\mapsto \max\limits_{s + tv\in P} \{ t \}$ is continuous. 
+\end{lemma}
+\begin{proof} 
+	Note that $f_v$ is indeed well defined: for any $s\in P$ the maximum $t$ does exist.%Don't make me prove this 
+	\par
+	Let $\bm{c^1}(x)\leq c^1_0,\dots, \bm{c^k}(x)\leq c^k_0$ be the facet-defining inequalities for $P$,
+	for $\bm{c^i}\in(\RR^p)^\star$.
+	Then $P$ is the region of points satisfying them all. \par
+	Without loss of generality we may assume that the $c^i$'s such that
+	$\bm{c^i}(v)>0$ are $\bm{c^1},\dots, \bm{c^j}$.
+	Given $s\in P, t\in \RR$ satisfying $s + tv \in P$, 
+	there exists an $\eps > 0$ such that 
+	$s + (t+ \eps)v\in P$ 
+	if and only if 
+	$\bm{c^i}(s+tv) < c^i_0$ 
+	for $i\in \{1,\dots, j\}$.\par %this is a simple computation
+	Then $\max$ in the definition of $f_v$ can be computed with
+	only $j$ inequalities:
+	\[ 
+	\max \{t\in \RR \, : \, s + tv\in P\} =
+	\max \left\{ t \in \RR \, : \, \bm{c^i}(s+tv) \leq c^i_0 \ \ \forall i \in \{1,\dots, j\}\right\} 
+	\]
+	Since we are computing a maximum restricted to inequalities,
+	it can be computed as
+	\[
+	f_v(s) = \min_{1\leq i \leq j} 
+	\Big\{\max \{ t \in \RR \, : \, \bm{c^i}(s+tv)\leq c^i_0\}\Big\}.
+	\]
+	For all $i\in\{1,\dots,j\}$
+	it is satisfied that 
+	$\max \{ t \in \RR \, : \, \bm{c^i}(s+tv)\leq c^i_0\} =
+	\frac{c^i_0-\bm{c^i}(s)}{\bm{c^i}(v)}$ for $1\leq i \leq j$. 
+	In consequence 
+	$f_v(s)=\min_{1\leq i \leq j} \frac{c^i_0-\bm{c^i}(s)}{\bm{c^i}(v)}$.
+	Then $f_v$ is continuous since it is the minimum of
+	finitely many continuous functions.
+\end{proof}
+
+We have the following corollary.
+
+\begin{corollary}
+	\label{lem:lemilla}
+	Given $s\in  {P}$ and $v\in\RR^p$ such that $s+v\in   P$.
+	There exists $U\subseteq   P$, 
+	an open set (with the topology of $  P$), $s\in U$,
+	and $\eps > 0$ such that $U+\eps v \subseteq   P$.
+\end{corollary}
+
+\begin{lemma} \label{lemm:dimm}
+    $\dim \Sigma(P,Q) \geq \dim P - \dim Q$
+\end{lemma} 
+\begin{proof}
+	Notice that the interior of P is non-empty, 
+	as $\dim P=p$.	
+	Let $u\in int \, P$ and $r=\pi(u)$. 
+	Then the fiber $\hat{P}\defs \pi^{-1}(r)$ 
+	is a polytope of dimension $p-q$. 
+	Indeed, 
+	$\hat{P}= P \cap (u + \ker \overline\pi)
+	\supset B \cap (u + \ker \overline\pi)$ 
+	for some open ball
+	$B\subset P$ centered in $u$. 
+	Trivially 
+	$\dim (B \cap (u + \ker \overline\pi)) = 
+	\dim \ker \overline\pi=p-q$.\par
+	Now take $\gamma$ a section. 
+	By definition $\gamma(r)\in \hat{P}$. 
+	As $\hat{P}$ is a polytope with direction $\ker \overline\pi$,
+	there exist linearly independent vectors 
+	$v_1,\dots, v_{p-q}\in \ker \overline\pi$ such that 
+	$\gamma(r)+ v_i\in \hat{P}$ and 
+	in particular $\gamma(r)+ v_i \in P$ for every $i$.
+	Let us denote $s\defs \frac{1}{\vol(Q)}\int_Q\gamma(x) \,\mathbb{d}x$. 
+	By definition $s \in \Sigma(P,Q)$. 
+	We will show that there exist $\delta_1,\dots, \delta_{p-q} > 0$ such that $s + \delta_i v_i \in \Sigma(P,Q)$ for each $i$. \par  
+	Fix $1\leq i \leq p-q$. 
+	Using $\cref{lem:lemilla}$ we conclude that 
+	there exists an open (relative to $P$) set $U_i$ containing $s$ and $\eps_i>0$ 
+	such that $z+ \eps_i v_i \in P$ for every $z\in U_i$.  
+	Let us define $V_i \defs \gamma^{-1}(U_i)$.
+	This set is open because $\gamma$ is continuous and $U_i$ is open.
+	Then we define the function $f_i \colon \RR^q \to \RR$
+	as a continuous function with the following properties:
+	\footnote{This function can be constructed even to be infinitely differentiable
+		with bump functions.}
+	\begin{enumerate}
+		\item For all $x\notin V_i$, satisfies $f_i(x) = 0$.
+		\item For all $x\in V_i $, satisfies $0 \leq f_i(x) \leq \eps$.
+		\item \label{itm:prova} Has positive integral: 
+		$\delta_i \defs \frac{1}{\vol Q}\int_Q f_i(x) dx > 0$.
+	\end{enumerate}
+	
+	Now let us define $\gamma_i\colon Q\to P$ as
+	$\gamma_i(x) \defs \gamma(x) + v_if_i(x)$.
+	This is indeed a section because:
+	\begin{enumerate}
+		\item It is continuous, because $\gamma$ and $f_i$ are continuous.
+		\item Since $v_i\in \ker  \overline\pi$,  
+		we compute
+		$\pi(\gamma_i(x)) = \pi(\gamma(x)) + \overline\pi(v_if_i(x)) = x + f_i(x)\pi(v_i) = x$. 
+	\end{enumerate}
+	Finally, we have 
+	$\frac{1}{\vol Q}\int_Q [\gamma(x)+ f_i(x)v_i] \mathrm{ d}x = 
+	s + \delta_i v_i \in \Sigma(P,Q)$.
+\end{proof}
+
+Now we need to prove that $\Sigma(P,Q)$ is a compact set. 
+In this step we will follow a different direction from the one
+proposed in the sketch of the proof in \cite[Thm 9.6]{ziegler2012lectures}, 
+where it is shown that $\Sigma(P,Q)$ is a polytope by means of the
+introduction of tight sections. 
+Instead, we will make use of a strong result from functional analysis:
+
+\begin{theorem}[Open mapping theorem] 
+	\label{thm:openmap}
+	Let $X$ and $Y$ be Banach spaces and $T:X\rightarrow Y$ 
+	a surjective continuous linear map. 
+	Then $T$ is an open map. 
+\end{theorem}
+
+Consider the vector space $\mathcal{G}$ of continuous maps 
+$\gamma: Q\rightarrow \RR^p$, 
+equipped with the norm 
+$||\gamma||=\max\limits_{r\in Q} ||\gamma(r)||$,
+where $\|\cdot\|$ is the usual euclidean norm in $\RR^p$.
+It is easily shown that $\mathcal{G}$ is a Banach space, i.e it is complete. 
+Also, $\RR^p$ equipped with its usual norm is a Banach space as well. 
+We will define the following linear operators:
+
+\begin{definition} 
+	Let $r\in Q$. 
+	Then the evaluation operator 
+	$\Ev_r: \mathcal{G}\rightarrow \RR^p$ 
+	is the one defined by $\Ev_r(\gamma)=\gamma(r)$.
+\end{definition}
+
+\begin{remark} 
+	The operator $\Ev_r$ is continuous. 
+	Given $\gamma_1,\gamma_2\in \mathcal{G}$ such that $||\gamma_1-\gamma_2||< \eps$,
+	then by definition 
+	$||\gamma_1(r)-\gamma_2(r)||< \eps$.
+\end{remark}
+
+\begin{lemma} 
+	The set $\Gamma$ of sections is closed in $\mathcal{G}$.
+\end{lemma}
+\begin{proof}
+	By definition, the sections are precisely the maps $\gamma \in \mathcal{G}$
+	such that $\gamma(r)\in \pi^{-1}(r)$ for every $r\in Q$.
+	Let $r\in Q$. Then the set of maps $\gamma \in \mathcal{G}$ satisfying 
+	$\gamma(r)\in \pi^{-1}(r)$ is $\Ev_r^{-1}( \pi^{-1}(r))$. 
+	As $\pi^{-1}(r)$ is closed and $\Ev_r$ is continuous, 
+	this last set is closed in $\mathcal{G}$. 
+	The set of sections can be written as 
+	$\bigcap_{r\in Q}\Ev_r^{-1}( \pi^{-1}(r))$, an intersection 
+	of closed sets in $\mathcal{G}$,
+	therefore it is closed itself. 
+\end{proof}
+
+Now, let $S: \mathcal{G}\rightarrow \RR^p$ be the linear operator defined by
+\begin{equation*} 
+	S(\gamma)= \frac{1}{\vol(Q)} \int_Q \gamma(x) \mathbb{d}x
+\end{equation*}
+This new operator is continuous as well. 
+Indeed, if $||\gamma_1-\gamma_2||< \eps$ it takes a simple computation to show 
+$||S(\gamma_1-\gamma_2)||< \eps$.
+Our operator $S$ is also surjective: 
+for any $s\in \RR^p$ take $\gamma\equiv s$ 
+(the constant function with value $s$).
+Then $S(\gamma)=s$. 
+Thus, using $\cref{thm:openmap}$ we conclude that $S$ is an open map. \par
+With this we have essentially proven the following.
+
+\begin{corollary} 
+	The set $\Sigma(P,Q)$ is compact
+\end{corollary}
+\begin{proof}
+	Notice that $\Sigma(P,Q)= S(\Gamma)$. 
+	As $S$ is an open map and $\Gamma$ is closed,
+	 $\Sigma(P,Q)$ must be closed as well.\par
+	To see that $\Sigma(P,Q)$ is bounded take 
+	$s_1, s_2\in \Sigma(P,Q)$ and
+	$\gamma_1,\gamma_2\in \Gamma$ 
+	such that $S(\gamma_1)=s_1$ and $S(\gamma_2)=s_2$.
+	Then 
+	$s_1-s_2 = 
+	\frac{1}{\vol(Q)} \int_Q (\gamma_1(x)-\gamma_2(x) \mathbb{d}x\leq \mathrm{diam}(P)$, 
+	where $\mathrm{diam}(P)$ denotes the diameter of $P$. \par
+	Now the result holds, as $\Sigma(P,Q)$ is a closed bounded set in $\RR^p$.
+\end{proof}
+
+
+We still don't know that $\Sigma(P,Q)$ is a polytope. 
+Since we need to talk of its faces, we will make the
+following auxiliary definition.
+
+\begin{definition}
+    \label{def:notYetKnownToBeFaces}
+    Given a convex set $C\subseteq\RR^p$, a linear function $\bm{c}\in (\RR^p)^\star$ and a scalar $c_0$,
+    we say that $\bm{c}(y) \leq c_0$ is a \emph{valid inequality} of $C$ it is satisfied in all $y\in C$.\par    
+    The equality region of a valid inequality of $C$ is a \emph{face}.  
+\end{definition}
+Note that this definition is the same as the one for faces of polytopes,
+but in this case a face may be empty or not a polytope.
+With the inclusion defined partial order, 
+the faces of a convex set have also poset structure.
+This way if the underlying convex set is a polytope, 
+we recover the definition of faces for a polytope.
+
+Let us first note that every element $\bm{c}\in(\RR^p)^\star$ defines
+both a face in $\Sigma(P,Q)$ and a coherent subdivision in $Q^c$:
+\begin{enumerate}
+	\item The face it defines is 
+	$\phi^c$, given by the valid inequality 
+	$\bm{c}(s) \geq \min_{y\in \Sigma(P,Q)} \bm{c}(y)$. 
+	\item The coherent subdivision it defines is the one given by
+	$\mathcal{F}^c$, as in \cite[Def. 9.2]{ziegler2012lectures}.
+\end{enumerate}
+
+We will see that we can find a bijection between 
+faces of $\Sigma(P,Q)$ and coherent subdivisions of $Q$
+through the elements $\bm{c}\in(\RR^p)^\star$.
+
+\begin{definition}
+	Let $s\in\Sigma(P,Q)$, then
+	\begin{equation}
+	\Gamma(s)\defs \left\{\gamma:Q\to P \mbox{ section : } 
+	s = \frac{1}{\vol(Q)}\int_Q\gamma(x) \,\mathbb{d}x \right\}
+	\end{equation}
+\end{definition}
+\begin{definition}
+	Given $\bm{c}\in(\RR^p)^\star$, let us define the following sets of sections:
+	\begin{equation}
+	\Gamma(\mathcal{F}^c) \defs 
+	\left\{ \gamma\::\: \gamma(Q)\subseteq \bigcup_{F\in \mathcal{F}^c} F \right\}, \qquad
+	\Gamma(\phi^c) \defs 
+	\bigcup_{s\in\phi^c} \Gamma(s) 
+	\end{equation}
+\end{definition}
+
+\begin{remark} 
+	\label{rmk:remarkAcMin}
+	Notice that $\Gamma(\phi^c)$ is not empty
+	as we have proven that $\Sigma(P,Q)$ is a compact set,
+	but $\Gamma(\mathcal{F}^c)$ may be. \par
+	Also, $\gamma\in \Gamma(\phi^c) \iff \bm{c}(s_\gamma) = \min_{y\in \Sigma(P,Q)}c(y) \iff \gamma$ minimizes $\mathcal{A}^c$. 
+	In particular, the minimum of $\mathcal{A}^c$ does exist.
+\end{remark}
+ 
+ 
+\begin{definition}
+	Given $c\in(\RR^p)^\star$, we define the functional 
+	$\mathcal{A}^c:\{\mbox{sections of } \pi \} \to \RR$ as:
+	\begin{equation}
+	\gamma \mapsto \mathcal{A}^c(\gamma) 
+	\defs \frac1{\vol(Q)} \int_Q \bm{c}(\gamma(x))\,\mbox{d}x
+	\end{equation}
+\end{definition}
+\begin{theorem} \label{thm:minsections}
+	Given $\gamma$ a section: 
+	\begin{enumerate}
+		\item $\gamma\notin\Gamma(\mathcal{F}^c)
+	    \implies \exists \gamma^\prime : 
+	    \mathcal{A}^c(\gamma^\prime) < \mathcal{A}^c( \gamma)$. 
+	
+		\item $\gamma\in\Gamma(\mathcal{F}^c) 
+		\implies  \mathcal{A}^c(\gamma) = 
+        \min\limits_{\sigma \text{ section}}\mathcal{A}^c(\sigma)$
+        (i.e., $\gamma$ minimizes $\mathcal{A}^c$).
+	
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+    \textcolor{white}{Avada Kedavra}
+    
+   	$\boxed{1. }$
+    
+	Since $\gamma\notin\Gamma(\mathcal{F}^c)$, 
+	there exists $r\in Q$ such that $\gamma(r)$ does not minimize $\bm{c}$ in $\pi^{-1}(r)$. 
+	Let $s \in \argmin\limits_{y\in\pi^{-1}(r)}\{\bm{c}(y)\}$,
+	Then we can define $v\defs s - \gamma(r)$. 
+	Clearly $\gamma(r)+ v\in P$. 
+	Thus we are in conditions to apply \cref{lem:lemilla}.
+	Analogously to the proof of \cref{lemm:dimm} we can construct a section 
+	$\gamma'(x)=\gamma(x) + f(x)v$, where $f:Q\rightarrow \RR$ is a continuous function satisfying: 
+		\begin{enumerate}
+			\item For some open set $V\subset Q$ such that $r\in V$, $f|_{Q\setminus V}=0$ and $f|_V>0$.
+			\item \label{itm:prova} Has positive integral: 
+			$\frac{1}{\vol Q}\int_Q f_i(x) dx > 0$.
+		\end{enumerate}
+    Let us show now that $\mathcal{A}^c(\gamma^\prime) < \mathcal{A}^c(\gamma)$.
+    \begin{equation}
+    	 \mathcal{A}^c(\gamma^\prime) = 
+         \frac1{\vol(Q)} \int_Q \left[\bm{c}(\gamma(x)) + \bm{c}(vf(x)) \right]\mathrm{ d}x = 
+         \mathcal{A}^c(\gamma)  + \frac{\bm{c}(v)}{\vol(Q)}\int_Q f(x)\mathrm{ d}x>  \mathcal{A}^c(\gamma)      
+    \end{equation}
+    Here using that $\bm{c}(v) < 0$ and property \ref{itm:prova} in the definition of $f(x)$, 
+    we get the desired inequality. \par
+    This implies that $\Gamma(\phi^c)\subseteq \Gamma(\mathcal{F}^c)$. 
+    Thus, $\Gamma(\mathcal{F}^c)$ is not empty.
+    
+	$\boxed{2.}$
+	
+	First let us note that for all $r\in Q$, 
+	the function $c$ has a minimum in $\pi^{-1}(r)$.
+	\footnote{This is because $\pi^{-1}(r)$ is a polytope and $\bm{c}$ is a linear function.}
+	Also, it is clear that for any section $\sigma$
+	\begin{equation}
+		\bm{c}(\sigma(r)) \geq c_0(r) \defs  \min_{y\in\pi^{-1}(r)}c(y),
+	\end{equation}
+	and therefore 
+	$\mathcal{A}^c(\sigma) \geq \frac1{\vol(Q)}\int_Q c_0(x) \mathrm{ d}x$.
+	If $\gamma\in \Gamma(\mathcal{F}^c)$, we know that $\forall r\in Q$,
+	the point $\binom{r}{\bm{c}(\gamma(r))}$ is in a lower face of $Q^c$. 
+	If $\bm{c}(\gamma(r))$ was not minimal in $\pi^{-1}(r)$, 
+	we could find $y\in \pi^{-1}(r)$ such that $\bm{c}(y) < \bm{c}( \gamma(r))$.
+	But since $y\in\pi^{-1}(r)$, this would produce a point $\binom{r}{\bm{c}(y)}$.
+	This is not possible because being the point in a lower face of $Q^c$ 
+	and having the same in the first $q$ coordinates, 
+	it cannot be that the last coordinate is decreased.
+\end{proof}
+
+\begin{corollary}
+    \label{cor:gammaEquality}
+    For all $\bm{c}\in(\RR^p)^\star$, the identity $\Gamma(\mathcal{F}^c) = \Gamma(\phi^c)$ is satisfied 
+    (see \cref{rmk:remarkAcMin}).
+\end{corollary}
+
+\begin{lemma} 
+	\label{lmm:isoInjective}
+	Let $\mathcal{F}_1,\mathcal{F}_2$ be coherent subdivisions. Then $\Gamma(\mathcal{F}_1)=\Gamma(\mathcal{F}_2)$ if and only if $\mathcal{F}_1=\mathcal{F}_2$.
+\end{lemma}
+\begin{proof} 
+	If $\mathcal{F}_1\neq \mathcal{F}_2$, 
+    we may assume without loss of generality 
+    that there exists a maximal face $F\in \mathcal{F}_1$, 
+    such that 
+    $F\nsubseteq \bigcup\limits_{G\in \mathcal{F}_2} G$. 
+    Let $H\defs \pi(F)$. 
+    Notice that $H$ is a polytope.
+    Also, being $F$ maximal in subdivision $\mathcal{F}_1$
+    implies that $\dim H=q$ 
+    and in consequence $\pi( \relint F)=\relint H= \mathrm{int} \, H$.
+    
+    The union of faces in  $\mathcal{F}_2$ is a closed set, 
+    so there is a point $s\in int \, F$ such that 
+    $s\notin \bigcup\limits_{G\in \mathcal{F}_2} G$.
+    Take $\gamma\in \Gamma(\mathcal{F})$. 
+    Then $\gamma(\pi(F))\subseteq F$.
+    Let $r\defs \pi(s)$, 
+    $v\defs s-\gamma(r)$ and 
+    $U\subset H$ be an open set of $\RR^q$ 
+    satisfying $s\in U$.
+    Then by virtue of \cref{lem:lemazo} 
+    and the might of bump functions 
+    we can define a section 
+    $\gamma^\prime(x)=\gamma(x) + f(x)v$, 
+    where $f$ is a continuous function such that $f(r)=1$ and
+    $f(x)=0$ in $Q\setminus U$, 
+    satisfying $\gamma^\prime(H)\subset F$.
+    Finally, we have 
+    $\gamma^\prime \in
+    \Gamma(\mathcal{F}_1)\setminus\Gamma(\mathcal{F}_2)$ 
+    and in consequence 
+    $\Gamma(\mathcal{F}_1)\neq \Gamma(\mathcal{F}_2)$. 
+\end{proof}
+
+
+\begin{corollary}
+    We have a poset isomorphism between 
+    $\omega_{coh}\cup \{\emptyset\}$ and the faces of $\Sigma(P,Q)$
+    \footnote{As a convex set, we still have not proved that $\Sigma(P,Q)$ is a polytope.}.
+\end{corollary}
+\begin{proof}
+	Given a $\pi$-induced coherent subdivision $\mathcal F$,
+	by definition it is $\mathcal{F}^c$ for some $c\in(\RR^p)^\star$.
+	So we can map it to the face of $\Sigma(P,Q)$ defined by that $c$, 
+	namely $\phi^c$. 
+	Shortly $\mathcal{F}^c\mapsto \phi^c$ and 
+	$\emptyset\mapsto\emptyset$.
+	We will prove that this map is indeed an isomorphism.
+	
+	This map is well defined 
+	(i.e., does no depend on the choice of $c$)
+	because in the definition of $\Gamma(\mathcal{F}^c)$
+	there is no explicit use of the particular $c$, 
+	but only of $\mathcal F^c$, so $\Gamma(\mathcal{F}^c)$ 
+	is independent of the choice of $c$.
+	By \cref{cor:gammaEquality}, 
+	it is equal to $\Gamma(\phi^c)$, 
+	and by definition of the aforementioned set,
+	$ \phi^{c_1} = \phi^{c_2} \iff
+	\Gamma(\phi^{c_1}) = \Gamma(\phi^{c_2})$.
+	
+	It is surjective because all faces are defined by 
+	an element $c\in(\RR^p)^\star$, 
+	except the empty face. 
+	This is why we add $\{\emptyset \}$ to the poset $\omega_{coh}$.
+	It is injective because of \cref{lmm:isoInjective}.
+
+    Now let's see that it respects the partial order.
+    Given $\mathcal{F}_1 \leq \mathcal{F}_2$. 
+    By definition of the partial order, this means that 
+    $\bigcup_{F\in\mathcal{F}_1} F \subseteq \bigcup_{F\in\mathcal{F}_2} F$.
+    Therefore
+    \begin{equation}
+        \Gamma(\mathcal{F}_1) = 
+        \left\{ \gamma : \gamma(Q) \subseteq \bigcup_{F\in\mathcal{F}_1} F \subseteq \bigcup_{F\in\mathcal{F}_2} F \right\} 
+        \subseteq  \Gamma(\mathcal{F}_2)
+    \end{equation} 
+    By \cref{cor:gammaEquality}, we have 
+    $\Gamma(\phi_1) \subseteq \Gamma(\phi_2) \iff \phi_1 \subseteq \phi_2$.
+    
+\end{proof}
+
+%This last theorem implies that, indeed $\Gamma(\mathcal{F}^c) = \Gamma(\phi^c)$,
+%which gives the desired bijection between the face lattice of $\Sigma(P,Q)$ and $\omega_{coh}$.
+
+Notice that because of this isomorphism we know that the face-lattice of $\Sigma(P,Q)$ has a finite number of elements. 
+Because of \cref{def:notYetKnownToBeFaces} this implies that there is also a finite number of inequalities that these faces satisfy as equalities, 
+and hence $\Sigma(P,Q)$ is a polytope.
+The identification of vertices with the tight $\pi$-coherent subdivisions of $Q$ 
+is made through \cite[Lemma 9.5]{ziegler2012lectures}, which concludes the proof.
+
+% Acaba la diversion
+
+%\newpage
+
+\section*{Additional Material}
+
+We have followed a different path than Ziegler in our proof,
+because we think needs less technical lemmas and details
+than the original one.
+However, in this \textit{additional material} we want to sketch
+how the proof in \cite[Thm. 9.4]{ziegler2012lectures}
+would be filled with details.
+We will provide all the definitions and intermediate results needed.
+Some of the proofs are also completed, while some others are left incomplete.
+
+\begin{remark}
+	A section $\gamma:Q\to P$ is uniquely defined by its image $\gamma (Q)$.
+\end{remark}
+\begin{proof}
+	Given $x\in Q$, $\gamma(x)$ will be the only element in 
+	$\pi^{-1}(x)\cap \gamma(Q)$. 
+	This set has exactly one element because $\pi\circ \gamma = \mathrm{id}_Q$.
+\end{proof}
+
+\begin{definition}
+	A section $\gamma:Q\to P$ is \emph{tight}
+	\footnote{Because working with tight sections without defining them
+		seems to be too \textit{Zieglery}.}
+	if:
+	\begin{equation}
+	\gamma(Q) = \bigcup_{F\in \mathcal F} F \qquad 
+	\mbox{for $\mathcal F\subseteq L (P)$ a subset of faces of $P$}		
+	\end{equation} 
+\end{definition}
+\begin{remark}
+	For a section to be tight, its corresponding subset of faces $\mathcal{F}$
+	must define a $\pi$-induced subdivision of $Q$, that is also tight.
+\end{remark}
+\begin{proof}
+	First observe that a section is an homeomorphism when restricted to its image,
+	because it is a continuous function, and its inverse (the restriction of $\pi$)
+	is a linear (and thus continuous) map. 
+	This means, in particular, that $\gamma$ has to respect dimensions of faces.
+	
+	For a subset of faces $\mathcal F\in L(P)$ to define a $\pi$-induced subdivision,
+	it must satisfy condition (ii) in \cite[Def 9.1]{ziegler2012lectures}.
+	Since $\gamma$ maintains dimensions and $\pi$ is a linear projection, 
+	for all $F\in \mathcal F$, $\pi^{-1}(\pi(F)) = F$,
+	so condition (ii) is always satisfied.
+	
+	By the same dimensional argument, the $\pi$-induced subdivision of $Q$ 
+	defined by $\gamma$ must also be tight. 
+\end{proof} 
+
+Note that given $\mathcal F\in L(P)$, the only issue for $\mathcal F$ to 
+define a tight section is the part of defining a section, 
+because if it does, then it is trivially tight
+\footnote{In fact, this observation suggests that the term \textit{tight} is not
+	well suited for this kind of sections, but for the sake of clarity, 
+	we wanted to use the same naming as in \cite{ziegler2012lectures}.}. 
+
+
+With this definition, there is trivially a finite number of tight sections,
+since each section is defined by its image, 
+which is determined by a subset of $L(P)$,
+and there are a finite number of them.
+%% ALBERTOS PLAYGROUND
+
+\begin{remark} 
+	The partial order on $\omega(P,Q)$ 
+	defined in \cite[Sec. 9.1]{ziegler2012lectures} 
+	is indeed a partial order. 
+	In particular, 
+	each $\pi$-induced subdivision $\mathcal{F}$ is determined by the union of its faces in $P$, 
+	$\bigcup_{F\in \mathcal{F}} F$.
+\end{remark}
+\begin{proof}
+	Let $\mathcal{F}$ be a $\pi$-induced subdivision and let 
+	$X= \bigcup_{F\in \mathcal{F}} F$. 
+	Let $\mathcal{G}$ be an arbitrary $\pi$-induced subdivision 
+	satisfying $ \bigcup_{G\in \mathcal{G}} G=X$. 
+	Let $H_1, H_2,...,H_l \subseteq X$ be the maximal elements from $L(P)$ contained in $X$. 
+	Then all the $H_i$ must be in $\mathcal{G}$. 
+	It is clear that $\pi(H_i)$ must be the maximal faces in $\pi(\mathcal{G})$ 
+	and thus $\pi(\mathcal{G})= L(\pi(G_1))\cup \dots \cup L(\pi(G_l))$, 
+	as $\pi(\mathcal{G})$ must be a polytopal complex. 
+	Finally, condition (ii) in \cite[Def. 9.1]{ziegler2012lectures} 
+	implies that the faces in $\mathcal{G}$ must be the ones satisfying 
+	$G=\pi^{-1}(J)\cup X$ for some face $J$ of $\pi(\mathcal{G})$, 
+	so $\mathcal{G}$ is unequivocally determined by $X$.  
+\end{proof}
+
+%Oh ye mighty, upon thy heavy sword our very last hope layeth. Gide our path to break free from the chains of Zieglerity. 
+%(Rezar a la deidad de las mates antes de intentar hacer una demostracion larga)
+
+\begin{claim} A section $\gamma$ is not tight if and only if there is a face $F\in L(P)$ such that $F\nsubseteq \gamma(Q)$ and $\relint \, F \cap \gamma(Q)\neq \emptyset$.
+\end{claim}
+\begin{proof} 
+	We will prove the contrapositive statement, i.e.
+	$\gamma$ is tight if and only if for every face $F\in L(P)$ such that 
+	$\relint \, F \cap \gamma(Q)\neq \emptyset$ 
+	then $F\subseteq \gamma(Q)$: \par
+	$\boxed{\Rightarrow}$ 
+	Suppose that for some $r\in Q$ and $F\in L(P)$, 
+	$\gamma(r) \in \relint \,F$.
+	Then any face $G\in L(P)$ contains $\gamma(r)$ if and only if $F\leq G$. 
+	If $\gamma$ is tight, then $\gamma(Q)$ is an union of faces from $P$, 
+	so $\gamma(Q)$ must contain a face greater than $F$ 
+	and in consequence it contains $F$ itself. \par
+	$\boxed{\Leftarrow}$ 
+	Suppose that $\gamma(Q)$ contains all the faces of $P$ whose relative interior intersect. 
+	Note that for every $r\in Q$, 
+	$\gamma(r)$ belongs to the relative interior of exactly one face of $L(P)$, 
+	namely the minimal face containing $\gamma(r)$.
+	Let us denote by $F(r)$ to such face. 
+	Then, clearly $\gamma(Q)=\bigcup_{r\in Q} F(r)$ and $\gamma$ is tight. 
+\end{proof}
+
+We will denote the set of faces by $L_n(P)$. 
+
+\begin{claim} Let $\gamma$ be a section, $r\in Q$ and $F\in L(P)$ such that $\gamma(r) \in  \relint\, F$. If every open set (relative to $Q$) $B\subseteq Q$ satisfying $r\in B$ verifies $\gamma(B)\nsubseteq F$, then there exists a face $G > F$ such that $\gamma(Q)\cap \relint\, G \neq \emptyset$.
+\end{claim}
+\begin{proof} 
+	Left incomplete.
+\end{proof}
+
+\begin{claim}\label{cl:convexCombSections}
+	If a section $\gamma$ is not tight, there exist two sections
+	$\gamma_1,\gamma_2$ such that $\gamma$ is a convex combination of 
+	$\gamma_1$ and $\gamma_2$, 
+	and the three points of $\Sigma(P,Q)$
+	defined by them are different. 
+\end{claim}
+\begin{proof}
+	Left incomplete.
+\end{proof}
+\begin{claim}
+	$\Sigma(P,Q)$ is a polytope.
+\end{claim}
+\begin{proof}
+	We know by \cref{clm:convex} that it is convex.
+	By \cref{cl:convexCombSections} and the number of tight sections being finite,
+	we know that only a finite number of points cannot be expressed as a convex 
+	combination of different elements in $\Sigma(P,Q)$.
+	Therefore, it is the convex hull of a finite number of points.
+\end{proof}
+
+\begin{remark}
+	Now we can say that we can restrict to sections
+	that are  piece-wise linear over a subdivision of $Q$,
+	because all points of $\Sigma(P,Q)$ are convex combinations
+	of points defined by tight sections, 
+	that are piece-wise linear over their subdivision of $Q$.
+\end{remark}
+
+\begin{definition} 
+	Given $S\subset \RR^p$ we will call the \emph{direction}
+	$\overrightarrow{S}$ of $S$ to the vector subspace of $\RR^p$ 
+	spanned by all vectors of the form $x-y$ for some $x,y\in S$. 
+\end{definition}
+
+We will use the following results:
+
+\begin{theorem} 
+	\label{thm:maxLinearInPolytope}
+	Let $P \subset \RR^p$ be a polytope and $c\in (\RR^ p)^\star$ a linear function. 
+	Then $c$ reaches its maximum over $P$ in a non-empty face of $P$. 
+	In other words: $\argmax(c_{|_P})\in L(P)$.
+\end{theorem}
+
+\begin{remark} In the previous theorem, it is direct that if $F=\argmax(c_{|_P})$ 
+	then $\overrightarrow{F}\subseteq \ker c$.
+\end{remark}
+
+\begin{definition}
+	Given a polytope $P\in \RR^P$, we will say that a linear function $c\in (\RR^p)^\star$ 
+	is  \emph{generic} with respect to $P$ if it reaches its maximum exactly in one vertex of $P$, i.e $\argmax(c_{|_P})\in V(P)$.
+\end{definition}
+
+
+\begin{corollary} Let $P\in \RR^P$ be a polytope, and $c\in (\RR^p)^\star$ be a linear function such that for any non-vertex face $F\in L(P)$ it is satisfied $\overrightarrow{F}\nsubseteq \ker c$. Then $c$ is generic respect to $P$.
+\end{corollary}
+
+\begin{lemma} 
+	Let $P \subset \RR^p$ be a polytope and let $A \subset \RR^p$ be an affine set.
+	Then the intersection $P \cap A$ is also a polytope 
+	and its non-empty faces are of the form $F\cap A$ for some $F\in L(P)$.
+\end{lemma}
+
+\begin{lemma}
+	\label{lem:lemilla}
+	Given $s\in  {P}$ and $v\in\RR^p$ such that $s+v\in   P$.
+	There exists $U\subseteq   P$, 
+	an open set (with the topology of $  P$), $s\in U$,
+	and $\eps > 0$ such that $U+\eps v \subseteq   P$.
+\end{lemma}
+\begin{proof}
+	Left incomplete.
+\end{proof}
+
+\begin{definition} 
+	Given a two polytopes $P\subset \RR^p$, $Q\subset \RR^q$ 
+	and a projection between them $\pi: \RR^p \rightarrow \RR^q$, $\pi(P)=Q$, 
+	we will say that a linear function $c\in (\RR^p)^\star$ is \emph{generic} with respect to $\pi$ over $P$ 
+	if every face $F\in L(P)$ such that $\overrightarrow{F}\cap \overrightarrow{\ker \pi} \neq \{0\}$
+	satisfies $\overrightarrow{F}\cap \overrightarrow{\ker \pi} \nsubseteq \ker c$.
+\end{definition}
+
+From now on we will keep the notation used in last definition. 
+
+\begin{corollary} 
+	If a linear function $c\in (\RR^ p)^\star$ is generic with respect to 
+	$\pi$ over $P$ then it is also generic with respect to each fiber $\pi^ {-1}(r)$, $r\in Q$.
+\end{corollary}
+
+%Nos gusta mas la topología que la teoria de la medida. Intentemos evitar usar la segunda:
+
+As its name suggests, "genericness" is an "almost-sure" property:
+
+\begin{lemma} 
+	Under the canonical identification $(\RR^ p)^\star \simeq \RR ^p$ 
+	the following sets of linear functions in $(\RR^ p)^\star$ are closed with empty interior: 
+	\begin{itemize}
+		\item[(1)] The set of non-generic functions with respect to $P$.
+		\item[(2)] The set of non-generic functions with respect to $\pi$ over $P$.
+	\end{itemize}
+\end{lemma}
+\begin{proof}
+	We will prove the statement for case (2). 
+	To prove it for case (1) one can proceed analogously.
+	Note that given a set $S\subset \RR^p$ and a function 
+	$c\in (\RR^p)^\star$, $S\subseteq \ker c$ is equivalent to $c\in S^\perp$. 
+	Now, note that there are finitely many linear subspaces  of the form 
+	$G=\overrightarrow{F}\cap \overrightarrow{\ker \pi}$ with $G\neq \{0\}$.
+	Finally, for any of such $G$'s, 
+	$G^\perp$ is trivially closed and it also has empty interior, as $\dim G < p$.  
+\end{proof}
+
+
+%
+%\begin{definition}{ALBERTOS DEFINITION}
+%	Given an affine map $\pi: \RR^p \rightarrow \RR^q$, a \textbf{generic} linear map $c:\RR ^p %\rightarrow \RR$ with respect to $\pi$ is one satisfying $\ker \, c \cap \, \ker \, %\overline{\pi}= \{0\}$, 
+%	where $\overline{\pi}$ is the linear map associated to $\pi$.
+%\end{definition}
+
+
+%We use this concept because vertices of a polytope can be characterized as the points
+%of a polytope maximizing a generic function over it.
+%\begin{claim}
+%	Consider $c\in (\RR^p)^\star$ generic with respect to $\Sigma(P,Q)$ \textcolor{red}{(and %maybe wrt $P$ as well)}. 
+%	Then for all $\bm{r}\in Q$, $\pi^{-1}(\bm r)$ has a unique maximal element 
+%	with respect to $c$.
+%\end{claim}
+%\begin{proof}
+
+%	Suppose there existed a fiber 
+%	$\pi^{-1}(r)$ 
+%	containing two different maximal elements with respect to $c$.
+%	Let $a_1, a_2$ be such maximal elements. 
+%	Then $ c(a_1) = c(a_2)\iff a_1 - a_2 \in \ker \, c$.
+%	And since they are in the same fiber $\pi^{-1}(r)$, 
+%	$\pi(a_1) = \pi(a_2) \iff a_1-a_2\in \ker\overline{\pi}$.
+%	But then $a_1 - a_2 \in \ker c \cap \ker\overline{\pi} = \{0\}$.
+%	In consequence, $a_1=a_2$, a contradiction. \par
+
+%%% Victor Version 
+%	TO COMPLETE. Suppose $\pi(x) = Ax + B$ and take $V = \{$subspace of $\mathbb{R}^p$ generated by the rows of A $\} $, then $\pi^{-1}(r) = (p_0 + V^{\perp})\cap P$ with $p_0 \in \pi^{-1}(r)$. Take $c$ generic with respect to $\pi$, then all the vertices of $\pi^{-1}(r)$ have a different image by $c$ and so there is a unique maximal element with respect to $c$. 
+%\end{proof}
+
+
+This way, given $c\in (\RR^p)^\star$ generic with respect to $\pi$ over $P$, we can define a section $\gamma^c$ as
+\begin{equation}
+\gamma^c(\bm r) = \argmax_{y \in \pi^{-1}(\bm r)}\{ c(y) \}
+\end{equation}
+\begin{claim} 
+	The map $\gamma^c$ is indeed a section.
+	%% 	Continuity of gamma^c is somewhat trivial and somewhat not. We can prove it if you want. I think we should. The easiest is to see that it is contunious succession-wise. 
+\end{claim}
+\begin{proof}
+	Left incomplete.
+\end{proof}
+
+\begin{claim}
+	The section previously defined $\gamma^c$ is tight,
+	and its corresponding subdivision of $Q$ is $\pi$-coherent.
+\end{claim}
+\begin{proof} 
+	%Please. Please. 
+	Just note that $S=\{ (x,y) \in \RR^{q+1} \, | \, x\in Q \, , y=c(\gamma^c(x)) \}$ is the union of the lower faces of $Q^c$. 
+	This implies that $(\pi^c)^{-1}(S)=\gamma^c(Q)$ is the union of faces of a coherent subdivision.  
+\end{proof}
+
+Now with all this, we could apply \cref{thm:minsections}
+and its corollaries to get the isomorphism. 
+At this point, there is no need to worry about technical details of 
+any of the $\Gamma$'s being empty,
+since we have already proved that $\Sigma(P,Q)$ is a polytope via
+tight sections.
+
+
+
+\bibliographystyle{amsplain}
+\bibliography{bib}
+
+\end{document}
