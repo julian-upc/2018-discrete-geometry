@@ -1,0 +1,78 @@
+1) 	Choose an arbitrary point O below any point x\in Q^c.
+	
+	Use an algorithm of fixed rotating line in the following way:
+	
+	i) Rotate line clock-wise until one of the next two conditions hold
+		
+		a) If the line intersects a point x_1\in Q^c, fix him as a vertex of lower faces of Q^c.
+		
+		b) If the line intersects starting point O algorithm ends and all vertices of lower faces of Q^c were found.
+		
+	ii)	Fix the line in found point x_1, go to i).
+	
+		Note: For finding the lower faces, we need to switch the direction of rotation, while fixing the line in the first found point. Otherwise we would find upper faces.
+		
+	Discussion of the choice of the point O:
+	
+		Indeed we should choose starting point O not freely arbitrary. If it will be close to the polytope Q^c, then we won't find all lower faces. There holds a rule the further the better.
+		
+		Other approach could be following. Choose two point below Q^c and find two solutions of such an algorithm. Then the result is an intersection of solutions.
+				
+2)	 Show that \int_P f(x) dx = vol(P)*f(p_0)
+
+	I will show it for a continuous function f(x) on interval [a,b].
+	
+	Construct a function g:[a,b]\to R s.t. 
+	g(x)=(x-a)*\int_{x}^{b} f(t) dt + (x-b)*\int_{a}^{x} f(t) dt,
+	
+	thus g(x) is continuous, differentiable on [a,b] and following equations hold:
+	
+	g(a)=(a-a)*\int_{a}^{b} f(t) dt + (a-b)*\int_{a}^{a} f(t) dt=0
+	g(b)=(b-a)*\int_{b}^{b} f(t) dt + (b-b)*\int_{a}^{b} f(t) dt=0
+	
+	According to Rolle's theorem for such function g(x) \exists c\in[a,b] s.t. g'(c)=0, then
+	
+	g(x)=(x-a)*(F(b)-F(x)) + (x-b)*(F(x)-F(a)),
+	
+	where F(x) is primitive function of f(x), then
+	
+	g'(x)=F(b) - F(x) - f(x)*(x-a) + F(x) - F(a) + f(x)*(x-b)
+		 =F(b) - F(a) - f(x)*((x-a)-(x-b))=
+		 =F(b) - F(a) - f(x)*(b-a)=0
+		 
+	in the point c yields
+	
+	g'(c)=F(b) - F(a) - f(c)*(b-a)=0
+	
+	F(b) - F(a) = f(c)*(b-a) 	
+	
+	\implies \int_{a}^{b} f(x) dx = (b-a)*f(c)
+	
+	In other words, this theorem says that we can compute this integral just with a knowledge of one average function value on the whole interval. For linear maps the average value is the center of the interval which is obviously the center of mass of the interval.
+	
+3)	Prove following statement: Fiber polytope \Sigma(P,Q) is a polytope of dimension dim P - dim Q, whose non-empty faces correspond to the \pi-coherent subdivision of Q, while vertices correspond to subdivisions, which are thigh ones. Its facets correspond to he proper subdivisions.
+
+	Recall few definitions:
+	Fiber polytope is  \Sigma(P,Q)={1/vol Q * \int_{Q} \gamma(x) dx|\gamma(x) is a section of \pi}
+	
+	thus from previous proof we can write
+	\Sigma(P,Q)={\gamma(r0)|\gamma is a section of \pi, r0 is a center of mass}
+	
+	\pi-coherent subdivision of Q
+	F^c:=(\pi^c)^-1(L(Q^c))
+	where L(Q^c) stands for lower faces of Q
+	
+	Tight subdivision of Q:
+	dim F = dim \pi(F) \forall F
+	
+	From this we can infer that fiber polytope projects a face of Q to a center of mass of a face of P, which was domain of face from Q.
+	
+	From definition we can say that \pi-coherent subdivision is such a subdivision which projects lower faces of Q to its domain in P.
+	
+	That means this is a projection face\to face. 
+	
+	Fiber polytope projects face\to point, but technically speaking this point is a representation of the domain polytope, thus non-exactly speaking it's a projection face\to face with dimension deffect.
+	
+	Analysing vertices of \Sigma(P,Q) firstly note that center of mass of a point is that point. 
+	
+	This yeilds that \Sigma(P,Q) projects vertex\to vertex, which corresponds to the tight subdivision of Q.
