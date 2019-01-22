@@ -1,10 +1,48 @@
-\documentclass[11pt]{amsart}
-
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{ dsfont }
+\usepackage{ amssymb }
+\usepackage{ tipa }
+\usepackage[utf8]{inputenc}
+\usepackage{ textcomp }
+\usepackage{ stmaryrd }
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\graphicspath{{/home/} }
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{mdframed}
+\usepackage{systeme,mathtools}
+\usepackage{multicol}
+\usepackage{ dsfont }
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tikz-cd}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{subcaption}
+\usepackage{ upgreek }
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage[english]{babel}
 \usepackage{a4wide}
 \usepackage{paralist}
 \usepackage{url}
 \usepackage{bbm}
 \usepackage{nopageno}
+
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\newcommand\acc[2]{\ensuremath{{}^{#1}\hskip-0.1ex{#2}}}
+\renewcommand{\baselinestretch}{1.2}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{example}{Example}[section]
+
 
 \newcommand{\cA}{\mathcal{A}}
 \newcommand{\cS}{\mathcal{S}}
@@ -14,43 +52,23 @@
 \DeclareMathOperator{\vol}{vol}
 \newcommand{\RR}{\mathbbm{R}}
 \newcommand{\CC}{\mathbbm{C}}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\id}{id}
+
+
+
+
+\title{DAG \\Sheet 4}
+\author{Víctor Ruiz}
+\date{17 December 2018}
+
+\usepackage{natbib}
+\usepackage{graphicx}
 
 \begin{document}
-\begin{center}
-\textbf{\sffamily
-   Discrete and Algorithmic Geometry }
 
-\medskip
-   Julian Pfeifle,
-   UPC, 2018
-\end{center}
-
-
-\begin{center}
-  \textbf{\sffamily Sheet 4}
-
-\bigskip
- due on Monday, December 10, 2018
-
- \bfseries
-
-\bigskip
-\bigskip
-\bigskip
-
-
-Important:
-
-\bigskip
-Please submit your solution to this exercise via a pull request
-
-so that we can discuss your work using the chat feature on github.
-
-\end{center}
-
-\bigskip
-\bigskip
-\bigskip
+\maketitle
 
 \begin{enumerate}
 \item Definition 9.2 in Ziegler's \emph{Lectures on Polytopes} constructs the linear map
@@ -74,11 +92,107 @@ so that we can discuss your work using the chat feature on github.
   \]
   for any polytope $P$, where $p_0 = \frac{1}{\vol(P)}\int_P x\,\text{d}x$ denotes the barycenter of $P$.
   \bigskip\bigskip
-\item Complete the proof of Theorem 9.6 in Ziegler's \emph{Lectures on Polytopes}, possibly referring to \cite{bs-1992}.
+\item Complete the proof of Theorem 9.6 in Ziegler's \emph{Lectures on Polytopes}.
   
 \end{enumerate}
 
-\bibliographystyle{plain}
-\bibliography{sheet4}
+
+
+
+\begin{enumerate}
+
+\item It is not possible, since we cannot obtain $Q^c$ (or $\mathcal L^\downarrow(Q^c)$) just from $Q$, $\pi$ and $c$. \newline For example, take $q = 1$, $Q$ any 1-polytope (any interval), $\pi(x,y) = x$ and $c = (0,1)$, then $\pi^c$ is the identity in $P$, so $Q^c = P$, but we are not given $P$, so it's impossible to get $Q^c$ or just $\mathcal L^\downarrow(Q^c)$.
+
+\item Directly from the linearity of $f$ and the linearity property of the integral:
+
+\begin{equation*}
+	\vol(P) f(p_0)
+	= \vol(P) f\left( \frac1{\vol (P)}\int_P x\,\mathrm{d}x \right)
+	= f\left(\int_P x\,\mathrm{d}x \right) 
+	= \int_P f(x) \,\mathrm{d}x
+\end{equation*}
+
+\newpage
+
+\item I will enumerate the parts of the sketch of Ziegler's proof which are not clear and I'll explain them:
+
+\begin{enumerate}[(i)]
+
+\item $\Sigma(P,Q)$ is convex.
+
+\begin{proof}
+Let $a,b \in \Sigma(P,Q)$ be two points and their corresponding sections $\gamma_a, \gamma_b$. Then $(ta + (1-t)b) = \int t\gamma_a + (1-t)\gamma_b = \int \gamma dx$ since the convex combination of two sections is a section (by the linearity of the integral and $\pi$).
+\end{proof}
+
+\item $\Sigma (P,Q) \subseteq \pi^{-1}(r_0)$
+
+\begin{proof}
+Take $a \in \Sigma(P,Q)$ and $\gamma_a$ its corresponding section, we have to prove that $\pi(a) = r_0$:
+\[\pi(a) = \pi( \frac{1}{\vol(Q)}\int \gamma_a dx) = \frac{1}{\vol(Q)}\int \pi(\gamma_a) dx = \frac{1}{\vol(Q)} \int x dx = r_0 \]
+\end{proof}
+
+
+\item $\dim(\Sigma(P,Q)) \leq p-q$ with $\dim(P) = p$, $\dim(Q) = q$.
+
+\begin{proof}
+We only have to see that $\pi^{-1}(r_0)$ has dimension $p-q$. \\ First, we have to suppose that $P$ and $Q$ have maximal dimension (if not, embbed them on its corresponding lower dimensional affine spaces). With this, using that we can use projective coordinates so $\pi$ can be seen as a linear function, 
+\[\dim(\pi^{-1}(r_0)) = \dim(\ker(\pi)) = \dim(\mathbb{R}^p) - \dim(\im(\pi)) = p-q\]
+\end{proof}
+
+
+
+\item "Every piecewise linear section that is not tight can be changed locally in two directions; thus it can be written as a convex combination of two other sections".
+
+\begin{proof}
+We have to define what a tight section is first, and prove that it has de desired properties:
+
+\begin{definition}
+A section $\gamma$ is tight if $\im \gamma = \bigcup_{f \in F}f$ for some $F \subseteq L(P)$. 
+\end{definition}
+With this definition, the ideas of Ziegler's proof work except this one we have to prove; that it can be changed locally in two directions.
+\end{proof}
+
+
+\item "To detect the vertices of $\Sigma(P, Q)$, we use that they arise as the unique maxima for generic linear functions $c \in (\mathbb{R}^p)^*$. However, if $c$ is generic, then
+every fiber $\pi^{-1}(r)$ for $ r \in Q$ has a unique maximal element with respect to $c$".
+
+\begin{proof}
+The problem of this part is the definition of $\emph{generic}$ linear functions. In this case there's only one possibility for the definition of generic:
+
+\begin{definition} [Ziegler's Definition 3.3]
+A linear function $c$ is generic with respect to a polytope $P$ if $cv_i \not= cv_j$ for every two distinct vertices $v_i, v_j$ of $P$.
+\end{definition}
+
+\begin{definition}
+A linear function $c$ will be generic with respect to a projection $\pi$ if $c$ is not parallel to $\pi^{-1}(r)$ for $r \in Q$.
+\end{definition}
+
+
+Now we use that $c$ is generic if it is generic with respect to $P$ and with respect to $\pi$ .With this definition of generic, it is clear that every fiber $\pi^{-1}(r)$ has a unique maximal element with respect to $c$.
+\newline 
+The last thing to see is that this definition of generic means that the $c$ which are not generic are irrelevant, which induces us the following definition:
+
+\begin{definition}
+A set $C \subseteq \mathbb{R}^p$ is in general position if $C^c$ has empty interior.
+\end{definition}
+
+(CLAIM: THE SET OF GENERIC c IS IN GENERAL POSITION)
+\end{proof}
+
+
+\item "A simple computation shows that for a continuous section $\gamma:Q \rightarrow P$, the point $\frac{1}{\vol(Q)}\int \gamma dx \in \Sigma(P,Q)$ lies in the face defined by $c$ if and only if the image of the section is entirely contained in the collection of faces $F^c \subseteq L(P)$".
+
+\begin{proof}
+
+\end{proof}
+
+
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+
+
 \end{document}
- 
